@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.EventBus", "Services\Common\Common.EventBus\Common.EventBus.csproj", "{BB84384E-C29F-4F6D-BD96-A82140573B09}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{D350DFF9-16EB-481D-A590-07F5606595CB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{657D75DC-DB80-4E3D-81BE-EE14C2F3D68D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateways", "Gateways", "{85E6EAB0-9871-4D11-96EE-DC7A9539EDCE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BB84384E-C29F-4F6D-BD96-A82140573B09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB84384E-C29F-4F6D-BD96-A82140573B09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB84384E-C29F-4F6D-BD96-A82140573B09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB84384E-C29F-4F6D-BD96-A82140573B09}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{657D75DC-DB80-4E3D-81BE-EE14C2F3D68D} = {D350DFF9-16EB-481D-A590-07F5606595CB}
+		{BB84384E-C29F-4F6D-BD96-A82140573B09} = {657D75DC-DB80-4E3D-81BE-EE14C2F3D68D}
+	EndGlobalSection
+EndGlobal

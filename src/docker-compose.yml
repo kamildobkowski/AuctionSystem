@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  auction_sql_db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-defaultuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-defaultpass}
+      POSTGRES_DB: ${POSTGRES_DB:-defaultdb}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:

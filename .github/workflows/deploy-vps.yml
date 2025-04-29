@@ -24,7 +24,7 @@ jobs:
       - name: Run docker-compose on remote
         run: |
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd /ścieżka/do/twojej/aplikacji
+            cd /docker/auction-system
             git pull origin master
             
             docker compose version || sudo apt-get update && sudo apt-get install -y docker-compose-plugin

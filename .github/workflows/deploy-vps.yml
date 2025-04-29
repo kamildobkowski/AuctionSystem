@@ -34,7 +34,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_rsa -t -p ${{ secrets.SSH_PORT }} \
             ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd /docker/auction-system
+            cd /docker/auction-system/src
 
             docker compose pull
             docker compose build

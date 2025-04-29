@@ -21,13 +21,20 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Run docker-compose on remote
+      - name: Rsync project to remote
         run: |
-          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
+          rsync -avz \
+            --delete \
+            --exclude '.git*' \
+            -e "ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }}" \
+            ./ \
+            ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/docker/auction-system
+
+      - name: Deploy on remote via SSH
+        run: |
+          ssh -i ~/.ssh/id_rsa -t -p ${{ secrets.SSH_PORT }} \
+            ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd /docker/auction-system
-            git pull origin master
-            
-            docker compose version || sudo apt-get update && sudo apt-get install -y docker-compose-plugin
 
             docker compose pull
             docker compose build

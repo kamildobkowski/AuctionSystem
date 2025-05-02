@@ -12,7 +12,8 @@ public class RegisterPersonalUserCommandValidator : AbstractValidator<RegisterPe
 
 		RuleFor(x => x.Password)
 			.NotEmpty()
-			.MinimumLength(8);
+			.MinimumLength(8)
+			.Matches(@"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W).+$");
 
 		RuleFor(x => x.RepeatPassword)
 			.NotEmpty()

@@ -11,12 +11,12 @@ public class KafkaEventBus : IEventBus
 	private readonly IProducer<Null, string> _producer;
 	private readonly JsonSerializerOptions    _jsonOptions;
 
-	public KafkaEventBus(IOptions<KafkaConfig> configOptions, ILogger<KafkaEventBus> logger)
+	public KafkaEventBus(KafkaConfig configOptions, ILogger<KafkaEventBus> logger)
 	{
 		_logger = logger;
 		var cfg = new ProducerConfig
 		{
-			BootstrapServers = configOptions.Value.BootstrapServers,
+			BootstrapServers = configOptions.BootstrapServers,
 			Acks = Acks.All
 		};
 

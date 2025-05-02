@@ -2,7 +2,7 @@ using Shared.Events.EventBus;
 
 namespace Shared.Events.Events;
 
-public class PersonalUserCreated : IEvent
+public class PersonalUserCreatedEvent : IEvent
 {
 	public Guid UserId { get; set; }
 	public string FirstName { get; set; } = default!;

@@ -22,8 +22,11 @@ public static class ServiceCollectionExtension
 
 	public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
 	{
+		var kafkaConfig =
+			configuration.GetSection("Kafka").Get<KafkaConfig>() 
+			?? throw new MissingFieldException("Kafka config is missing");
+		services.AddSingleton<KafkaConfig>(kafkaConfig);
 		services.AddSingleton<IEventBus, KafkaEventBus>();
-		services.Configure<KafkaConfig>(_ => configuration.GetSection("Kafka"));
 		return services;
 	}
 }

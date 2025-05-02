@@ -4,14 +4,15 @@ namespace Identity.Domain.Entities;
 
 public sealed class User
 {
-	public Guid Id { get; init; } = default!;
+	public Guid Id { get; init; } = Guid.NewGuid();
 	public string Email { get; private set; } = default!;
 	public string PasswordHash { get; private set; } = default!;
 	public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 	public DateTime ModifiedAt { get; private set; } = DateTime.UtcNow;
-	public bool IsCompany { get; private set; } = false;
+	public bool IsCompany { get; private set; }
+	public bool IsAccountActivated { get; private set; }
 	public CompanyDetails? CompanyDetails { get; private set; }
-	public PersonalDetails? PersonalDetails { get; set; }
+	public PersonalDetails? PersonalDetails { get; private set; }
 
 	public static User CreatePersonal(string email, string passwordHash,
 		string firstName, string lastName, PhoneNumber? phoneNumber = null)
@@ -48,5 +49,9 @@ public sealed class User
 		};
 	}
 	
-	
+	public void ActivateAccount()
+	{
+		IsAccountActivated = true;
+		ModifiedAt = DateTime.UtcNow;
+	}
 }

@@ -1,3 +1,3 @@
 namespace Identity.Application.Features.RegisterPersonalUser;
 
-public record RegisterPersonalUserResponse();
+public record RegisterPersonalUserResponse(bool IsActivationEmailSent);

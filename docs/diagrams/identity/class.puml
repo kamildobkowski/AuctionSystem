@@ -1,0 +1,31 @@
+@startuml class
+package "Identity" {
+    class User <<Entity>> {
+        +Id: Guid
+        +Email: string
+        +Password: string
+        +CreatedAt: DateTime
+        +UpdatedAt: DateTime
+        +OAuthId: string?
+    }
+    class CompanyData <<Entity>> {
+        +Id: Guid
+        +Name: string
+    }
+    class Profile <<Entity>> {
+        +Id: Guid
+        +FirstName: string
+        +LastName: string
+        +PhoneNumber: string
+    }
+    class Address <<ValueObject>>{
+        +Line1: string
+        +Line2: string
+        +PostalCode: string
+        +City: string
+        +Country: enum
+    }
+
+    User --- Profile
+    User --- Address
+}

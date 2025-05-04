@@ -9,6 +9,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yarp", "Gateways\yarp\yarp.csproj", "{A7BE0DFC-106E-4759-8ABE-010D105CC81F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{1C3BDD01-FEEB-4BE8-B432-10EB6068BDD4}"
+	ProjectSection(SolutionItems) = preProject
+		Services\Identity\Dockerfile = Services\Identity\Dockerfile
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Api", "Services\Identity\Identity.Api\Identity.Api.csproj", "{A30EFCC2-98BE-4CE3-9B92-B18A637A0E9E}"
 EndProject

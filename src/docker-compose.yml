@@ -64,6 +64,39 @@ services:
       - "6379:6379"
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:-defaultpass}
+      
+  identity-api:
+    build:
+      context: .                        # kontekst = src/
+      dockerfile: Services/Identity/Dockerfile
+    container_name: identity-api
+    restart: always
+    ports:
+      - "6111:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    depends_on:
+      - auction_sql_db
+      - kafka
+    networks:
+      - backend
+    
+  yarp-gateway:
+    build:
+      context: .
+      dockerfile: Gateways/yarp/Dockerfile
+    container_name: yarp-gateway
+    restart: always
+    ports:
+      - "4444:80"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    networks:
+      - backend
 
 volumes:
   db_data:
+    
+networks:
+  backend:
+    driver: bridge

@@ -62,12 +62,10 @@ services:
     restart: always
     ports:
       - "6379:6379"
-    environment:
-      REDIS_PASSWORD: ${REDIS_PASSWORD:-defaultpass}
       
   identity-api:
     build:
-      context: .                        # kontekst = src/
+      context: .
       dockerfile: Services/Identity/Dockerfile
     container_name: identity-api
     restart: always

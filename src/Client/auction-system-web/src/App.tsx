@@ -1,21 +1,20 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import { Result, Button } from "antd";
 import './App.css'
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import {LoginPage} from "./features/login/LoginPage.tsx";
+import {RegisterPage} from "./features/register/RegisterPage.tsx";
+import {ConfigProvider} from "antd";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-        <BrowserRouter>
-            <Routes>
-                <Route path="/login" element={<LoginPage/>}/>
-            </Routes>
-        </BrowserRouter>
+        <ConfigProvider>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/login" element={<LoginPage/>}/>
+                        <Route path="/register" element={<RegisterPage/>}/>
+                    </Routes>
+                </BrowserRouter>
+        </ConfigProvider>
     </>
   )
 }

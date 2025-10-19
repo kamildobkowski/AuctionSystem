@@ -1,0 +1,101 @@
+@page "/register"
+@using AuctionSystem.Contracts.Identity
+@using MudBlazor
+@using AuctionSystem.Web.Pages.Register.Components
+
+<MudContainer MaxWidth="MaxWidth.Small">
+    <h2>Register</h2>
+    <MudPaper Class="pa-4">
+        <MudToggleGroup T="UserType" @bind-Value="_userType">
+            <MudTooltip Text="For individual users registering for personal use">
+                <MudToggleItem Value="@UserType.Personal" Class="w-100">
+                Personal account
+                </MudToggleItem>
+            </MudTooltip>
+            <MudTooltip Text="For businesses or organizations registering on behalf of a company">
+                <MudToggleItem Value="@UserType.Company" Class="w-100">
+                Company account
+                </MudToggleItem>
+            </MudTooltip>
+
+        </MudToggleGroup>
+        @if (_userType == UserType.Personal)
+        {
+            <PersonalUserRegisterForm Request="_request"/>
+        }
+        else
+        {
+            <MudForm @ref="_form" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
+                <MudStack Spacing="3" Class="mt-6">
+                    <MudTextField @bind-Value="_request.FirstName"
+                                  Label="First name"
+                                  Placeholder="First name"
+                                  Variant="Variant.Outlined"
+                                  Immediate="true"
+                                  Required="true"/>
+
+                    <MudTextField @bind-Value="_request.LastName"
+                                  Label="Surname"
+                                  Placeholder="Surname"
+                                  Variant="Variant.Outlined"
+                                  Immediate="true"
+                                  Required="true"/>
+
+                    <MudTextField @bind-Value="_request.Email"
+                                  Label="E-mail"
+                                  Placeholder="you@example.com"
+                                  Variant="Variant.Outlined"
+                                  Immediate="true"
+                                  Required="true"
+                                  For="@(() => _request.Email)"/>
+
+                    <!-- Password -->
+                    <MudTextField @bind-Value="_request.Password"
+                                  Label="Hasło"
+                                  Variant="Variant.Outlined"
+                                  InputType="@(_showPassword ? InputType.Text : InputType.Password)"
+                                  Immediate="true"
+                                  Required="true"
+                                  For="@(() => _request.Password)">
+                    </MudTextField>
+
+                    <!-- Confirm -->
+                    <MudTextField @bind-Value="_request.RepeatPassword"
+                                  Label="Potwierdź hasło"
+                                  Variant="Variant.Outlined"
+                                  InputType="@(_showPassword ? InputType.Text : InputType.Password)"
+                                  Immediate="true"
+                                  Required="true"
+                                  For="@(() => _request.RepeatPassword)"/>
+
+                    <!-- Terms -->
+                    <MudCheckBox @bind-Checked="_accept"
+                                 Required="true"
+                                 Label="Akceptuję regulamin i politykę prywatności"
+                                 For="@(() => _accept)"/>
+
+                    <!-- Actions -->
+                    <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="mt-2">
+                        <MudButton Type="Submit" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.PersonAdd">
+                            Zarejestruj się
+                        </MudButton>
+                    </MudStack>
+                </MudStack>
+            </MudForm>
+        }
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private MudForm _form;
+    private bool _accept = false;
+    private bool _showPassword = false;
+    private RegisterPersonalUserCommand _request = new();
+    private UserType _userType;
+
+    enum UserType
+    {
+        Personal,
+        Company
+    }
+}

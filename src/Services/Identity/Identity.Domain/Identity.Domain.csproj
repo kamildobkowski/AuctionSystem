@@ -10,4 +10,8 @@
       <PackageReference Include="Countries" Version="2.0.0.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Shared\Shared.Base\Shared.Base.csproj" />
+    </ItemGroup>
+
 </Project>

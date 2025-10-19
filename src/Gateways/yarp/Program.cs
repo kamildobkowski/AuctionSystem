@@ -1,7 +1,8 @@
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCors(o => o.AddPolicy("AllowAll", p =>
-	p.AllowAnyOrigin()
+builder.Services.AddCors(o => o.AddPolicy("AllowAll", 
+	p =>
+		p.AllowAnyOrigin()
 		.AllowAnyHeader()
 		.AllowAnyMethod()
 ));

@@ -15,18 +15,17 @@ public class ErrorResult
 
 	public IReadOnlyCollection<Error>? Errors { get; set; }
 
-	public static ErrorResult GenericError = new ErrorResult()
+	public static readonly ErrorResult GenericError = new ErrorResult()
 	{
 		ErrorDescription = "Unknown error occured",
 		ErrorCode = "UnknownError",
 		StatusCode = HttpStatusCode.InternalServerError
 	};
 
-	public static ErrorResult AuthorizationError = new ErrorResult()
+	public static readonly ErrorResult UnauthorizedError = new ErrorResult()
 	{
-		ErrorDescription = "Authorization error occured",
-		ErrorCode = "AuthorizationError",
-		StatusCode = HttpStatusCode.BadRequest
+		ErrorCode = nameof(UnauthorizedError),
+		StatusCode = HttpStatusCode.Unauthorized
 	};
 
 	public static ErrorResult DomainError(List<Error> errors) => new()

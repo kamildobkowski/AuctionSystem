@@ -1,5 +1,5 @@
-using Identity.Application.Repositories;
-using Identity.Application.Services;
+using Identity.Domain.Repositories;
+using Identity.Domain.Services;
 using Identity.Domain.ValueObjects;
 using StackExchange.Redis;
 

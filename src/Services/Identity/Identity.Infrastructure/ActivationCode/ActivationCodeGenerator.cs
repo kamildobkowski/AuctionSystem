@@ -1,13 +1,13 @@
 using System.Security.Cryptography;
-using Identity.Application.Services;
 using Identity.Domain.Entities;
 using Identity.Domain.Services;
+using Identity.Infrastructure.Email;
 using Shared.Events.EventBus;
 using Shared.Events.Events;
 
 namespace Identity.Infrastructure.ActivationCode;
 
-public class ActivationCodeGenerator(ICacheService cacheService, IEventBus eventBus) 
+public class ActivationCodeGenerator(ICacheService cacheService, IEmailService emailService) 
 	: IActivationCodeGenerator
 {
 	public async Task GenerateAndStoreCodeAsync(User user)
@@ -19,7 +19,7 @@ public class ActivationCodeGenerator(ICacheService cacheService, IEventBus event
 		} while (await cacheService.IsActivationCodeTaken(code));
 
 		await cacheService.SetActivationCode(user.Id.ToString(), code);
-		await eventBus.PublishAsync(new EmailVerificationRequiredEvent { Code = code, Email = user.Email });
+		await emailService.SendAccountConfirmationEmail(user.Email, code);
 	}
 	
 	private static string GenerateCode()

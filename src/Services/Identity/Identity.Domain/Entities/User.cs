@@ -11,8 +11,10 @@ public sealed class User
 	public DateTime ModifiedAt { get; private set; } = DateTime.UtcNow;
 	public bool IsCompany { get; private set; }
 	public bool IsAccountActivated { get; private set; }
-	public CompanyDetails? CompanyDetails { get; private set; }
-	public PersonalDetails? PersonalDetails { get; private set; }
+	public CompanyDetails? CompanyDetails { get; private init; }
+	public PersonalDetails? PersonalDetails { get; private init; }
+	public string? RefreshTokenHash { get; private set; }
+	public DateTime? RefreshTokenExpiresAt { get; private set; }
 
 	public static User CreatePersonal(string email, string passwordHash,
 		string firstName, string lastName, PhoneNumber? phoneNumber = null)
@@ -54,4 +56,14 @@ public sealed class User
 		IsAccountActivated = true;
 		ModifiedAt = DateTime.UtcNow;
 	}
+	
+	public void SetRefreshToken(string token, DateTime expiresAt)
+	{
+		RefreshTokenHash = token;
+		RefreshTokenExpiresAt = expiresAt;
+		ModifiedAt = DateTime.UtcNow;
+	}
+	
+	public string GetName()
+		=> IsCompany ? CompanyDetails!.Name : $"{PersonalDetails!.FirstName} {PersonalDetails.LastName}";
 }

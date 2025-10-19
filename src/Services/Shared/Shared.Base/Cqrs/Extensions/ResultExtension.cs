@@ -12,6 +12,11 @@ public static class ResultExtension
 	{
 		if (commandResult.IsSuccess)
 		{
+			if (successStatusCode == StatusCodes.Status204NoContent)
+			{
+				return new StatusCodeResult(successStatusCode);
+			}
+			
 			return new ObjectResult(commandResult.Result)
 			{
 				StatusCode = successStatusCode

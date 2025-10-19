@@ -1,5 +1,4 @@
 using System.Text;
-using Identity.Application.Services;
 using Identity.Domain.Entities;
 using Identity.Domain.Services;
 using Microsoft.AspNetCore.Identity;
@@ -14,9 +13,9 @@ public class HashService(IPasswordHasher<User> passwordHasher) : IHashService
 		return result;
 	}
 	
-	public bool VerifyHash(User user, string hash)
+	public bool VerifyHash(User user, string password)
 	{
-		var result = passwordHasher.VerifyHashedPassword(null!, hash, user.PasswordHash);
+		var result = passwordHasher.VerifyHashedPassword(null!, user.PasswordHash, password);
 		return result == PasswordVerificationResult.Success;
 	}
 }

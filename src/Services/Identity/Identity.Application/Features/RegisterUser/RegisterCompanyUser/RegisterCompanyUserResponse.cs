@@ -1,0 +1,3 @@
+namespace Identity.Application.Features.RegisterUser.RegisterCompanyUser;
+
+public record RegisterCompanyUserResponse(bool IsActivationEmailSent);

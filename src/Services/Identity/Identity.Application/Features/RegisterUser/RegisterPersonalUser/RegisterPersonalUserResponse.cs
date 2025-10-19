@@ -1,0 +1,3 @@
+namespace Identity.Application.Features.RegisterUser.RegisterPersonalUser;
+
+public record RegisterPersonalUserResponse(bool IsActivationEmailSent);

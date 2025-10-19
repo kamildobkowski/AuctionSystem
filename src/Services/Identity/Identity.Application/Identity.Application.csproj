@@ -16,4 +16,8 @@
       <PackageReference Include="Microsoft.FeatureManagement" Version="4.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Common\Configuration\" />
+    </ItemGroup>
+
 </Project>

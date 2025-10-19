@@ -1,16 +1,18 @@
-using Identity.Application.Repositories;
-using Identity.Application.Services;
 using Identity.Domain.Entities;
+using Identity.Domain.Repositories;
 using Identity.Domain.Services;
 using Identity.Infrastructure.ActivationCode;
 using Identity.Infrastructure.Cache;
+using Identity.Infrastructure.Configuration;
 using Identity.Infrastructure.Database;
+using Identity.Infrastructure.Email;
 using Identity.Infrastructure.Passwords;
 using Identity.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Identity.Infrastructure.Token;
 using StackExchange.Redis;
 
 namespace Identity.Infrastructure;
@@ -32,6 +34,15 @@ public static class DependencyInjectionExtension
 		services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 		services.AddScoped<ICacheService, CacheService>();
 		services.AddScoped<IActivationCodeGenerator, ActivationCodeGenerator>();
+
+		// Jwt configuration and token service
+		var jwtSection = configuration.GetSection("JwtConfiguration");
+		var jwtConfig = new JwtConfiguration();
+		jwtSection.Bind(jwtConfig);
+		services.AddSingleton(jwtConfig);
+		services.AddScoped<IRefreshTokenHasher, RefreshTokenHasher>();
+		services.AddScoped<ITokenService, TokenService>();
+		services.AddScoped<IEmailService, EmailService>();
 		return services;
 	}
 }

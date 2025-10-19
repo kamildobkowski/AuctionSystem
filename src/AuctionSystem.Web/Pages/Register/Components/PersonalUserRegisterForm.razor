@@ -1,0 +1,66 @@
+@using AuctionSystem.Contracts.Identity
+@using MudBlazor
+
+<MudForm @ref="Form" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
+            <MudStack Spacing="3" Class="mt-6">
+                <MudTextField @bind-Value="Request.FirstName"
+                              Label="First name"
+                              Variant="Variant.Outlined"
+                              Immediate="true"
+                              Required="true"/>
+
+                <MudTextField @bind-Value="Request.LastName"
+                              Label="Surname"
+                              Variant="Variant.Outlined"
+                              Immediate="true"
+                              Required="true"/>
+
+                <MudTextField @bind-Value="Request.Email"
+                              Label="E-mail"
+                              Variant="Variant.Outlined"
+                              Immediate="true"
+                              Required="true"
+                              For="@(() => Request.Email)">
+                </MudTextField>
+
+                <!-- Password -->
+                <MudTextField @bind-Value="Request.Password"
+                              Label="Hasło"
+                              Variant="Variant.Outlined"
+                              InputType="@(ShowPassword ? InputType.Text : InputType.Password)"
+                              Immediate="true"
+                              Required="true"
+                              For="@(() => Request.Password)">
+                </MudTextField>
+
+                <!-- Confirm -->
+                <MudTextField @bind-Value="Request.RepeatPassword"
+                              Label="Potwierdź hasło"
+                              Variant="Variant.Outlined"
+                              InputType="@(ShowPassword ? InputType.Text : InputType.Password)"
+                              Immediate="true"
+                              Required="true"
+                              For="@(() => Request.RepeatPassword)"/>
+
+                <!-- Terms -->
+                <MudCheckBox @bind-Checked="AcceptTerms"
+                             Required="true"
+                             Label="Akceptuję regulamin i politykę prywatności"
+                             For="@(() => AcceptTerms)"/>
+
+                <!-- Actions -->
+                <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center" Justify="Justify.Center" Class="mt-2">
+                    <MudButton Type="Submit" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.PersonAdd">
+                        Zarejestruj się
+                    </MudButton>
+                </MudStack>
+            </MudStack>
+        </MudForm>
+@code {
+    [Parameter]
+    public required RegisterPersonalUserCommand Request { get; set; }
+    
+    private MudForm? Form { get; set; }
+    private bool ShowPassword { get; set; } = false;
+    private bool AcceptTerms { get; set; } = false;
+}

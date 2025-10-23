@@ -23,6 +23,7 @@ public class LoginController : ControllerBase
 	}
 
 	[HttpPost("register/company")]
+	[ProducesResponseType<RegisterCompanyUserResponse>(201)]
 	public async Task<IActionResult> RegisterCompany([FromBody] RegisterCompanyUserCommand command,
 		[FromServices] ICommandHandler<RegisterCompanyUserCommand, RegisterCompanyUserResponse> handler)
 	{

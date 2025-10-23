@@ -1,11 +1,10 @@
 using Auctions.Domain.Entities;
 using Auctions.Domain.Repositories;
-using Shared.Events.EventBus;
 using Shared.Events.Events.Auctions;
 
 namespace Auctions.Domain.Services;
 
-public class BidAuctionService(IBidAuctionRepository repository, IEventBus eventBus) : IBidAuctionService
+public class BidAuctionService(IBidAuctionRepository repository) : IBidAuctionService
 {
 	public async Task<BidAuction> Create(
 		string title, 
@@ -20,7 +19,7 @@ public class BidAuctionService(IBidAuctionRepository repository, IEventBus event
 		var entity = new BidAuction(title, description, startDate, setEndDate, startingPrice, minimalPrice, sellerId);
 		await repository.AddAsync(entity, cancellationToken);
 		var @event = MapEvent(entity);
-		await eventBus.PublishAsync(@event, cancellationToken);
+		//await eventBus.PublishAsync(@event, cancellationToken);
 		return entity;
 	}
 

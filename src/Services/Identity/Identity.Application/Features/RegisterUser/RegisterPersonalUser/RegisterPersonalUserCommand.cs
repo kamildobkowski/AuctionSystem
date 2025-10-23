@@ -4,10 +4,11 @@ using Identity.Domain.Entities;
 using Identity.Domain.Repositories;
 using Identity.Domain.Services;
 using Identity.Domain.ValueObjects;
+using MassTransit;
 using Microsoft.FeatureManagement;
 using Shared.Base.Cqrs.Commands;
 using Shared.Base.Errors;
-using Shared.Events.EventBus;
+using Shared.Events.Events.Users;
 
 namespace Identity.Application.Features.RegisterUser.RegisterPersonalUser;
 
@@ -15,8 +16,8 @@ public record RegisterPersonalUserCommand(string Email, string Password, string 
 	string LastName, string PhonePrefix, string PhoneNumber) : ICommand;
 
 internal sealed class RegisterPersonalUserCommandHandler(IValidator<RegisterPersonalUserCommand> validator, IUserRepository repository, 
-	IHashService hashService, ICacheService cacheService, IEventBus eventBus, IFeatureManager featureManager,
-	IActivationCodeGenerator codeGenerator) 
+	IHashService hashService, ICacheService cacheService, IFeatureManager featureManager,
+	IActivationCodeGenerator codeGenerator, ITopicProducer<PersonalUserCreatedEvent> producer) 
 	: ICommandHandler<RegisterPersonalUserCommand, RegisterPersonalUserResponse>
 {
 	public async Task<ICommandResult<RegisterPersonalUserResponse>> HandleAsync(RegisterPersonalUserCommand command, 
@@ -45,16 +46,23 @@ internal sealed class RegisterPersonalUserCommandHandler(IValidator<RegisterPers
 			});
 		
 		repository.Add(user);
-		await repository.SaveChangesAsync(cancellationToken);
 		var isActivationEmailEnabled = await featureManager.IsEnabledAsync("UserEmailVerification");
 		if (isActivationEmailEnabled)
 			await codeGenerator.GenerateAndStoreCodeAsync(user);
 		else
 		{
 			user.ActivateAccount();
-			await repository.SaveChangesAsync(cancellationToken);
 		}
-		
+
+		await producer.Produce(new PersonalUserCreatedEvent
+		{
+			Email = user.Email,
+			FirstName = user.PersonalDetails!.FirstName,
+			LastName = user.PersonalDetails!.LastName,
+			UserId = user.Id
+		}, cancellationToken);
+
+		await repository.SaveChangesAsync(cancellationToken);
 		return CommandResult.Success(new RegisterPersonalUserResponse(isActivationEmailEnabled));
 	}
 }

@@ -1,11 +1,9 @@
 using Identity.Application;
 using Identity.Infrastructure;
 using Microsoft.FeatureManagement;
-using Shared.Events.EventBus;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEventBus(builder.Configuration);
 builder.Services.AddFeatureManagement();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication(builder.Configuration);

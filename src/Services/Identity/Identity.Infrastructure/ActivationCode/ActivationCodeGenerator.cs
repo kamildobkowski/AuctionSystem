@@ -2,8 +2,6 @@ using System.Security.Cryptography;
 using Identity.Domain.Entities;
 using Identity.Domain.Services;
 using Identity.Infrastructure.Email;
-using Shared.Events.EventBus;
-using Shared.Events.Events;
 
 namespace Identity.Infrastructure.ActivationCode;
 

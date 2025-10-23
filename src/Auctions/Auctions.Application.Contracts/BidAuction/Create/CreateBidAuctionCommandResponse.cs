@@ -1,3 +1,3 @@
-namespace Auctions.Application.BidAuction.Create;
+namespace Auctions.Application.Contracts.BidAuction.Create;
 
 public record CreateBidAuctionCommandResponse(Guid BidAuctionId);

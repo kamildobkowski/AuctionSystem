@@ -1,8 +1,6 @@
-using Shared.Events.EventBus;
-
 namespace Identity.Infrastructure.Email;
 
-public class EmailService(IEventBus eventBus) : IEmailService
+public class EmailService() : IEmailService
 {
 	public Task SendAccountConfirmationEmail(string email, string code)
 	{

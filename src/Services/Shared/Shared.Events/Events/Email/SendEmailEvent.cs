@@ -1,8 +1,6 @@
-using Shared.Events.EventBus;
-
 namespace Shared.Events.Events.Email;
 
-public class SendEmailEvent : IEvent
+public class SendEmailEvent
 {
 	public static string Topic { get; } = "email.send";
 	public Guid Id { get; set; } = Guid.NewGuid();

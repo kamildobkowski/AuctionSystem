@@ -2,7 +2,7 @@ namespace Auctions.Domain.Entities;
 
 public class BidAuction : Auction
 {
-	public BidAuction() { } // for ef core
+	private BidAuction() { } // for ef core
 
 	public BidAuction(string title,
 		string? description,

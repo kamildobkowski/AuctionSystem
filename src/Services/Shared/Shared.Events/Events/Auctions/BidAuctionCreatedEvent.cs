@@ -1,10 +1,8 @@
-using Shared.Events.EventBus;
-
 namespace Shared.Events.Events.Auctions;
 
-public class BidAuctionCreatedEvent : IEvent
+public class BidAuctionCreatedEvent
 {
-	public static string Topic { get; } = "pl.kamildobkowski.auctions.bidauction.created.v1";
+	public static string Topic { get; } = "auctions.bidauction.created.v1";
 
 	public Guid AuctionId { get; set; }
 

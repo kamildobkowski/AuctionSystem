@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <InvariantGlobalization>true</InvariantGlobalization>
+      <UserSecretsId>db869b75-ea55-473e-be4a-6b966c9c9ff2</UserSecretsId>
+  </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Auctions\Auctions.Application.Contracts\Auctions.Application.Contracts.csproj" />
+      <ProjectReference Include="..\..\Shared\Shared.Base\Shared.Base.csproj" />
+    </ItemGroup>
+
+</Project>

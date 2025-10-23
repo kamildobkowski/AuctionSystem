@@ -2,7 +2,7 @@ namespace Auctions.Domain.Entities;
 
 public class BuyNowAuction : Auction
 {
-	public BuyNowAuction() {} //for ef core
+	private BuyNowAuction() {} //for ef core
 	
 	public BuyNowAuction(
 		string title,

@@ -13,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Identity.Infrastructure.Token;
+using MassTransit;
+using Shared.Events.Events.Users;
 using StackExchange.Redis;
 
 namespace Identity.Infrastructure;
@@ -23,6 +25,26 @@ public static class DependencyInjectionExtension
 	{
 		services.AddDbContext<UserDbContext>(x => 
 			x.UseNpgsql(configuration.GetConnectionString("postgres")));
+		
+		services.AddMassTransit(x =>
+		{
+			x.UsingInMemory();
+			x.AddEntityFrameworkOutbox<UserDbContext>(x =>
+			{
+				x.QueryDelay = TimeSpan.FromSeconds(1);
+				x.DuplicateDetectionWindow = TimeSpan.FromMinutes(10);
+				x.UsePostgres();
+			});
+			x.AddRider(rider =>
+			{
+				rider.AddProducer<PersonalUserCreatedEvent>(PersonalUserCreatedEvent.Topic);
+				rider.UsingKafka((context, configurator) =>
+				{
+					configurator.Host("vpn.kamildobkowski.pl:9092");
+				});
+			});
+		});
+		
 		services.AddSingleton<IDatabase>(x =>
 		{
 			var cfg = configuration.GetConnectionString("Redis");

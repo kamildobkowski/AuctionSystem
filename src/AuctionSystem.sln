@@ -34,6 +34,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auctions.Infrastructure", "Services\Auctions\Auctions.Infrastructure\Auctions.Infrastructure.csproj", "{6FF9C121-59A6-4113-A761-84036C2660DC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Auctions", "Auctions", "{8B373F72-C242-4BC7-82EA-BDCDC1458AE8}"
+	ProjectSection(SolutionItems) = preProject
+		Services\Identity\Dockerfile = Services\Identity\Dockerfile
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{8FA47956-6351-4FFA-ACDF-287D6458A6B7}"
 EndProject
@@ -42,6 +45,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuctionSystem.Web", "AuctionSystem.Web\AuctionSystem.Web.csproj", "{A8CAF1CF-0C38-4996-98F5-6DAC87A306EC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuctionSystem.Contracts", "Clients\Blazor\AuctionSystem.Contracts\AuctionSystem.Contracts.csproj", "{A66985CF-3CE6-4957-A50F-386DF68E2F68}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auctions.Application.Contracts", "Auctions\Auctions.Application.Contracts\Auctions.Application.Contracts.csproj", "{8C156FCF-644B-49FF-BEA5-0478E727CECD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auctions.Domain.Common", "Services\Auctions\Auctions.Domain.Common\Auctions.Domain.Common.csproj", "{138689FF-70C9-48C2-ADA3-1BE75A71A53C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,6 +108,14 @@ Global
 		{A66985CF-3CE6-4957-A50F-386DF68E2F68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A66985CF-3CE6-4957-A50F-386DF68E2F68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A66985CF-3CE6-4957-A50F-386DF68E2F68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C156FCF-644B-49FF-BEA5-0478E727CECD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C156FCF-644B-49FF-BEA5-0478E727CECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C156FCF-644B-49FF-BEA5-0478E727CECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C156FCF-644B-49FF-BEA5-0478E727CECD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{138689FF-70C9-48C2-ADA3-1BE75A71A53C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{138689FF-70C9-48C2-ADA3-1BE75A71A53C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{138689FF-70C9-48C2-ADA3-1BE75A71A53C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{138689FF-70C9-48C2-ADA3-1BE75A71A53C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{657D75DC-DB80-4E3D-81BE-EE14C2F3D68D} = {D350DFF9-16EB-481D-A590-07F5606595CB}
@@ -120,5 +135,7 @@ Global
 		{277C4FF2-907A-4F91-9EC5-3FB2C67A1AF1} = {8FA47956-6351-4FFA-ACDF-287D6458A6B7}
 		{A8CAF1CF-0C38-4996-98F5-6DAC87A306EC} = {277C4FF2-907A-4F91-9EC5-3FB2C67A1AF1}
 		{A66985CF-3CE6-4957-A50F-386DF68E2F68} = {277C4FF2-907A-4F91-9EC5-3FB2C67A1AF1}
+		{8C156FCF-644B-49FF-BEA5-0478E727CECD} = {8B373F72-C242-4BC7-82EA-BDCDC1458AE8}
+		{138689FF-70C9-48C2-ADA3-1BE75A71A53C} = {8B373F72-C242-4BC7-82EA-BDCDC1458AE8}
 	EndGlobalSection
 EndGlobal

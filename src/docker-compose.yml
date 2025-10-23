@@ -67,10 +67,26 @@ services:
     build:
       context: .
       dockerfile: Services/Identity/Dockerfile
+      network: host
     container_name: identity-api
     restart: always
     ports:
       - "6111:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    depends_on:
+      - auction_sql_db
+      - kafka
+        
+  auctions-api:
+    build:
+      context: .
+      dockerfile: Services/Auctions/Dockerfile
+      network: host
+    container_name: auctions-api
+    restart: always
+    ports:
+      - "6222:8080"
     environment:
       ASPNETCORE_ENVIRONMENT: Development
     depends_on:
@@ -81,6 +97,7 @@ services:
     build:
       context: .
       dockerfile: Gateways/yarp/Dockerfile
+      network: host
     container_name: yarp-gateway
     restart: always
     ports:

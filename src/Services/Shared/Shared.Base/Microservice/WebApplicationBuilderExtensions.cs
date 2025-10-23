@@ -17,7 +17,7 @@ public static class WebApplicationBuilderExtensions
 		builder.Services.AddControllers();
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();
-		
+		builder.Services.AddHttpContextAccessor();
 		builder.Services.AddScoped<IUserContextProvider, UserContextProvider>();
 		
 		return builder;

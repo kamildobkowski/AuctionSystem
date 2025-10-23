@@ -13,8 +13,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Auctions\Auctions.Application.Contracts\Auctions.Application.Contracts.csproj" />
       <ProjectReference Include="..\..\Shared\Shared.Base\Shared.Base.csproj" />
+      <ProjectReference Include="..\Auctions.Application.Contracts\Auctions.Application.Contracts.csproj" />
     </ItemGroup>
 
 </Project>

@@ -2,32 +2,43 @@ using Shared.Base.Errors;
 
 namespace Shared.Base.Result;
 
-public static class Result
+public readonly struct Result
 {
-	public static Result<T> Ok<T>(T value) 
-		=> new Result<T>
-		{
-			Value = value
-		};
+	private Result(ErrorResult? errorResult = null)
+	{
+		ErrorResult = errorResult;
+	}
 
-	public static Result<T> Failure<T>(ErrorResult error)
-		=> new Result<T>
-		{
-			ErrorResultOptional = error
-		};
+	public ErrorResult? ErrorResult { get; }
+	public bool IsSuccess => ErrorResult is null;
+
+
+	public static Result Ok => new();
+
+	public static Result Failure(ErrorResult error) => new(error);
 	
-	public static Result<T> Failure<T>(List<Error> errors)
-		=> new Result<T>
-		{
-			ErrorResultOptional = ErrorResult.DomainError(errors)
-		};
+	public static Result Failure(List<Error> errors) => new(ErrorResult.DomainError(errors));
 }
 
-public class Result<T>
+public struct Result<T>
 {
-	public ErrorResult? ErrorResultOptional { get; init; }
+	public ErrorResult? ErrorResult { get; }
 
-	public T Value { get; init; } = default!;
+	public T Value { get; } = default!;
 	
-	public bool IsSuccess => ErrorResultOptional == null;
+	public bool IsSuccess => ErrorResult is null;
+
+	private Result(ErrorResult errorResult)
+	{
+		ErrorResult = errorResult;
+	}
+
+	private Result(T value)
+	{
+		Value = value;
+	}
+
+	public static Result<T> Ok(T value) => new(value);
+	
+	public static Result<T> Failure(ErrorResult error) => new(error);
 }

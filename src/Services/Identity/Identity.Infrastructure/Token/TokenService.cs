@@ -70,11 +70,11 @@ public class TokenService(
         if (user is null 
             || !user.RefreshTokenExpiresAt.HasValue 
             || user.RefreshTokenExpiresAt.Value < DateTime.UtcNow)
-            return Result.Failure<(string, string)>(ErrorResult.UnauthorizedError);
+            return Result<(string, string)>.Failure(ErrorResult.UnauthorizedError);
 
         var newAccess = GenerateAccessToken(user);
         var newRefreshPlain = await GenerateRefreshToken(user);
 
-        return Result.Ok((newAccess, newRefreshPlain));
+        return Result<(string, string)>.Ok((newAccess, newRefreshPlain));
     }
  }

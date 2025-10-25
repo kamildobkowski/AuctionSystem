@@ -10,11 +10,14 @@
 
     <ItemGroup>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9"/>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\Shared\Shared.Base\Shared.Base.csproj" />
       <ProjectReference Include="..\Auctions.Application.Contracts\Auctions.Application.Contracts.csproj" />
+      <ProjectReference Include="..\Auctions.Application\Auctions.Application.csproj" />
+      <ProjectReference Include="..\Auctions.Infrastructure\Auctions.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

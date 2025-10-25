@@ -1,8 +1,12 @@
+using Auctions.Application;
+using Auctions.Infrastructure;
 using Shared.Base.Microservice;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.UseMicroservice();
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication();
 
 var app = builder.Build();
 
@@ -14,7 +18,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

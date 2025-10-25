@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Shared\Shared.Base\Shared.Base.csproj" />
       <ProjectReference Include="..\..\Shared\Shared.Events\Shared.Events.csproj" />
       <ProjectReference Include="..\Auctions.Domain.Common\Auctions.Domain.Common.csproj" />
     </ItemGroup>

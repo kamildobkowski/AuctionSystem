@@ -1,0 +1,24 @@
+@startuml
+title Sequence diagram: Finalize bid auction
+Actor Buyer
+Actor Seller
+Participant "Frontend" as Frontend
+Participant "Bid Service" as BidService
+Participant "Auction Service" as AuctionService
+Participant "Finalize Service" as FinalizeService
+Participant "Notification Service" as NotificationService
+
+Buyer -> Frontend : Place Bid
+Frontend ->> BidService : WS bid/place
+activate BidService
+BidService ->> AuctionService : pl.kamildobkowski.bid.newbid.v1
+loop
+    AuctionService -> AuctionService : Check if auction ended
+end
+AuctionService ->> FinalizeService : pl.kamildobkowski.auction.finalize.v1
+activate FinalizeService
+FinalizeService -> FinalizeService : Create FinalizedAuction
+FinalizeService ->> NotificationService : pl.kamildobkowski.auction.finalized.notification.v1
+NotificationService -->> Buyer : Send notification
+
+@enduml

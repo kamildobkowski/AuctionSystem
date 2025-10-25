@@ -1,11 +1,10 @@
 using Shared.Base.Cqrs.Commands;
 
-namespace Auctions.Application.Contracts.BidAuction.Create;
+namespace Auctions.Application.Contracts.BidAuction.InitializeCreate;
 
-public sealed record CreateBidAuctionCommand(
+public sealed record InitializeCreateBidAuctionCommand(
 	string Title, 
 	string? Description, 
 	decimal StartingPrice, 
 	decimal? MinimalPrice,
-	DateTime? StartDate,
 	DateTime EndDate) : ICommand;

@@ -1,5 +1,5 @@
+using Auctions.Domain.Common.Enums;
 using Auctions.Domain.Entities;
-using Auctions.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,6 +9,8 @@ public class AuctionConfiguration : IEntityTypeConfiguration<Auction>
 {
 	public void Configure(EntityTypeBuilder<Auction> builder)
 	{
+		builder.UseTptMappingStrategy();
+		
 		builder.HasKey(auction => auction.Id);
 		
 		builder.Property(x => x.Title)
@@ -23,7 +25,9 @@ public class AuctionConfiguration : IEntityTypeConfiguration<Auction>
 				x => (AuctionStatus)Enum.Parse(typeof(AuctionStatus), x));
 
 		builder.HasOne(x => x.AuctionStats)
-			.WithOne(x => x.Auction);
+			.WithOne(x => x.Auction)
+			.HasForeignKey<AuctionStats>(s => s.AuctionId)
+				.OnDelete(DeleteBehavior.Cascade);
 		
 		builder.HasMany(x => x.Pictures)
 			.WithOne(x => x.Auction);

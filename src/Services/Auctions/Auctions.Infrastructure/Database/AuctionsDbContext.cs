@@ -1,4 +1,5 @@
 using Auctions.Domain.Entities;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 namespace Auctions.Infrastructure.Database;
@@ -15,9 +16,23 @@ public class AuctionsDbContext(DbContextOptions<AuctionsDbContext> options) : Db
 
 	public DbSet<Picture> Pictures { get; set; }
 
-	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
-		optionsBuilder.UseNpgsql();
-		base.OnConfiguring(optionsBuilder);
+		modelBuilder.ApplyConfigurationsFromAssembly(typeof(AuctionsDbContext).Assembly);
+		modelBuilder.AddInboxStateEntity(cfg =>
+		{
+			cfg.ToTable("inbox_state", "mt");
+		});
+
+		modelBuilder.AddOutboxMessageEntity(cfg =>
+		{
+			cfg.ToTable("outbox_message", "mt");
+		});
+
+		modelBuilder.AddOutboxStateEntity(cfg =>
+		{
+			cfg.ToTable("outbox_state", "mt");
+		});
+		base.OnModelCreating(modelBuilder);
 	}
 }

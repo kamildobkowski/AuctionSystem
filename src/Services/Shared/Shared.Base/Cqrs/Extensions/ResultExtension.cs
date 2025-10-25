@@ -23,7 +23,7 @@ public static class ResultExtension
 			};
 		}
 
-		if (commandResult.ErrorResultOptional is null)
+		if (commandResult.ErrorResult is null)
 		{
 			return new ObjectResult(ErrorResult.GenericError)
 			{
@@ -31,9 +31,9 @@ public static class ResultExtension
 			};
 		}
 
-		return new ObjectResult(commandResult.ErrorResultOptional)
+		return new ObjectResult(commandResult.ErrorResult)
 		{
-			StatusCode = (int)commandResult.ErrorResultOptional.StatusCode
+			StatusCode = (int)commandResult.ErrorResult.StatusCode
 		};
 	}
 	

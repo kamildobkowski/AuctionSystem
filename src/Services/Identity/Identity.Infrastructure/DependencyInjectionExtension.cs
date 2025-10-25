@@ -40,7 +40,7 @@ public static class DependencyInjectionExtension
 				rider.AddProducer<PersonalUserCreatedEvent>(PersonalUserCreatedEvent.Topic);
 				rider.UsingKafka((context, configurator) =>
 				{
-					configurator.Host("vpn.kamildobkowski.pl:9092");
+					configurator.Host(configuration.GetValue<string>("Kafka:BootstrapServers"));
 				});
 			});
 		});

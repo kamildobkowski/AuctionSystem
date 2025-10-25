@@ -9,9 +9,6 @@ public class BuyNowAuctionConfiguration : IEntityTypeConfiguration<BuyNowAuction
 	public void Configure(EntityTypeBuilder<BuyNowAuction> builder)
 	{
 		builder
-			.HasKey(x => x.Id);
-		
-		builder
 			.Property(x => x.Price)
 			.HasPrecision(2);
 	}

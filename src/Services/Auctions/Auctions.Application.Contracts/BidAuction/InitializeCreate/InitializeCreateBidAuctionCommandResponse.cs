@@ -1,0 +1,3 @@
+namespace Auctions.Application.Contracts.BidAuction.InitializeCreate;
+
+public sealed record InitializeCreateBidAuctionCommandResponse(Guid BidAuctionId);

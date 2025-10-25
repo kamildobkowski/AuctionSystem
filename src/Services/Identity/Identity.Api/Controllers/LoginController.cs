@@ -6,10 +6,12 @@ using Identity.Application.Features.Login;
 using Identity.Application.Features.RefreshToken;
 using Identity.Application.Features.RegisterUser.RegisterCompanyUser;
 using Identity.Application.Features.RegisterUser.RegisterPersonalUser;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Identity.Api.Controllers;
 
 [ApiController]
+[AllowAnonymous]
 [ProducesResponseType<ErrorResult>(400)]
 public class LoginController : ControllerBase
 {

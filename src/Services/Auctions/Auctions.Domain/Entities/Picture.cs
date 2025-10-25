@@ -1,10 +1,12 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Auctions.Domain.Entities;
 
 public class Picture
 {
 	public Guid Id { get; set; }
 
-	public string Url { get; set; } = default!;
+	[MaxLength(200)] public string Url { get; set; } = default!;
 
 	public bool IsPrimary { get; set; }
 

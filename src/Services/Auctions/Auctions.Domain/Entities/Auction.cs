@@ -1,44 +1,43 @@
-using Auctions.Domain.Enums;
+using System.ComponentModel.DataAnnotations;
+using Auctions.Domain.Common.Enums;
+using Auctions.Domain.Common.Helpers;
+using Auctions.Domain.Entities.Base;
 
 namespace Auctions.Domain.Entities;
 
-public abstract class Auction
+public abstract class Auction : Aggregate<Guid>
 {
-	public Guid Id { get; set; }
+	[MaxLength(200)] public string Title { get; protected set; } = null!;
 
-	public string Title { get; set; } = null!;
+	[MaxLength(500)] public string? Description { get; protected set; }
 
-	public string? Description { get; set; }
+	public AuctionStatus Status { get; protected set; }
 
-	public AuctionStatus Status { get; set; }
+	public DateTime CreatedAt { get; protected set; }
 
-	public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+	public DateTime SetStartDate { get; protected set; }
 
-	public DateTime SetStartDate { get; set; }
+	public DateTime SetEndDate { get; protected set; }
 
-	public DateTime SetEndDate { get; set; }
+	public DateTime? EndedAt { get; protected set; }
 
-	public DateTime? EndedAt { get; set; }
-
-	public Guid SellerId { get; set; }
-
+	public Guid SellerId { get; protected set; }
 	
-	public Guid AuctionStatsId { get; set; }
+	public AuctionStats AuctionStats { get; protected set; } = null!;
 
-	public AuctionStats AuctionStats { get; set; } = null!;
+	public List<Picture> Pictures { get; protected set; } = [];
 
-	public List<Picture> Pictures { get; set; } = [];
-
-	protected Auction() { } //for ef core
+	protected Auction() { } //for serialization
 	
-	protected Auction(string title, string? description, DateTime? startDate, DateTime setEndDate, Guid sellerId)
+	protected Auction(string title, string? description, DateTime setEndDate, Guid sellerId)
 	{
 		Id = Guid.NewGuid();
 		Title = title;
 		Description = description;
-		Status = AuctionStatus.Scheduled;
-		SetStartDate = startDate?.ToUniversalTime() ?? DateTime.UtcNow;
+		Status = AuctionStatus.Created;
 		SetEndDate = setEndDate.ToUniversalTime();
 		AuctionStats = new AuctionStats(Id);
+		SellerId = sellerId;
+		CreatedAt = DateTimeHelper.Now;
 	}
 }

@@ -2,9 +2,9 @@ using Shared.Base.Errors;
 
 namespace Shared.Base.Cqrs.Commands;
 
-public interface ICommandResult<T>
+public interface ICommandResult<out T>
 {
-	public ErrorResult? ErrorResultOptional { get; init; }
-	public T Result { get; init; }
+	public ErrorResult? ErrorResult { get; }
+	public T Result { get; }
 	public bool IsSuccess { get; }
 }

@@ -11,4 +11,14 @@ public class BidAuctionCreatedEvent
 	public Guid SellerId { get; set; }
 
 	public decimal CurrentPrice { get; set; }
+
+	private BidAuctionCreatedEvent() { }
+	
+	public BidAuctionCreatedEvent(Guid auctionId, string title, Guid sellerId, decimal currentPrice)
+	{
+		AuctionId = auctionId;
+		Title = title;
+		SellerId = sellerId;
+		CurrentPrice = currentPrice;
+	}
 }

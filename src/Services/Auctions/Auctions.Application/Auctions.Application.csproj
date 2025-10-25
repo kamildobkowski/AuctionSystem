@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Clients\Blazor\AuctionSystem.Contracts\AuctionSystem.Contracts.csproj" />
       <ProjectReference Include="..\..\Shared\Shared.Base\Shared.Base.csproj" />
       <ProjectReference Include="..\Auctions.Application.Contracts\Auctions.Application.Contracts.csproj" />
       <ProjectReference Include="..\Auctions.Domain\Auctions.Domain.csproj" />

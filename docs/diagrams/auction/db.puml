@@ -1,0 +1,156 @@
+@startuml Auction database model
+title Auction microservice - Database Model
+
+package "Auction" {
+    entity "Auction" as Auction {
+        * auction_id : UUID
+        --
+        * title : nvarchar(200)
+        * description : nvarchar(MAX)
+        * status : AuctionStatus
+        * kind : AuctionKind
+        * user_id : UUID
+        * created_at : DateTime
+        * start_time : DateTime
+        * end_time : DateTime
+    }
+
+    entity "BidAuction" as BidAuction {
+        * auction_id : UUID
+        --
+        * starting_price : decimal(10,2)
+        * minimal_price : decimal(10,2)?
+        * current_price : decimal(10,2)
+    }
+
+    entity "BuyNowAuction" as BuyNowAuction{
+        * auction_id : UUID
+        --
+        * price : decimal(10,2)
+        * available_quantity : int
+    }
+
+    entity "DutchAuction" as DutchAuction #LightPink{
+        * auction_id : UUID
+        --
+        * starting_price : decimal(10,2)
+        * minimal_price : decimal(10,2)
+        * current_price : decimal(10,2)
+        * price_decrement : decimal(10,2)
+        * decrement_interval_minutes : int
+    }
+
+    entity "DutchAuctionDecrement" as DutchAuctionDecrement #LightPink {
+        * decrement_id : UUID
+        --
+        * auction_id : UUID
+        * next_decrement : DateTime
+    }
+
+    class "AuctionStats" as AuctionStats {
+        * stats_id : UUID
+        --
+        * auction_id : UUID
+        * views : int
+        * bidder_count : int
+    }
+
+    class "Picture" as Picture {
+        * picture_id : UUID
+        --
+        * auction_id : UUID
+        * url : nvarchar(500)
+        * is_primary : bool
+    }
+
+    enum AuctionKind {
+        * StandardBid
+        * BuyNow
+        * Dutch
+    }
+
+    enum AuctionStatus {
+        * Scheduled
+        * Active
+        * Ended
+        * Cancelled
+    }
+
+    enum DeliveryKind {
+        * Standard
+        * Express
+        * Pickup
+    }
+
+    Auction ||--|| BidAuction : "is a"
+    Auction ||--|| BuyNowAuction : "is a"
+    Auction ||--|| DutchAuction : "is a"
+    Auction ||--o{ Picture : "has"
+    Auction ||--|| AuctionStats : "has"
+    DutchAuction ||--o{ DutchAuctionDecrement : "has"
+}
+
+package "Bid" {
+    entity "BidAuction" as BidAuction {
+        * auction_id : UUID
+        --
+        * current_bid : UUID?
+        * next_minimal_bid : decimal(10,2)
+        * is_active : bool
+    }
+
+    entity "Bid" as Bid {
+        * bid_id : UUID
+        --
+        * auction_id : UUID
+        * user_id : UUID
+        * amount : decimal(10,2)
+        * placed_at : DateTime
+    }
+
+    BidAuction ||--o{ Bid : "has"
+}
+
+package "Finalize" {
+    entity "FinalizedAuction" as FinalizedAuction {
+        * finalized_id : UUID
+        --
+        * auction_id : UUID
+        * final_price : decimal(10,2)
+        * finalized_at : DateTime
+        * delivery_option_id : UUID
+        * status : FinalizationStatus
+    }
+
+    class "FinalizedAuctionBuyer" as FinalizedAuctionBuyer {
+        * finalized_buyer_id : UUID
+        --
+        * finalized_id : UUID
+        * user_id : UUID
+        * name : nvarchar(200)
+        * address : nvarchar(500)
+        * contact_info : nvarchar(200)
+    }
+
+    entity "DeliveryOption" as DeliveryOption {
+        * option_id : UUID
+        --
+        * auction_id : UUID
+        * kind : DeliveryKind
+        * carrier : nvarchar(100)
+        * cost : decimal(10,2)
+        * estimated_delivery_days : int
+    }
+    
+    enum FinalizationStatus {
+        * Pending
+        * Shipped
+        * Delivered
+        * Cancelled
+    }
+
+    FinalizedAuction ||--|| FinalizedAuctionBuyer : "has"
+    FinalizedAuction ||--|| DeliveryOption : "uses"
+}
+
+@enduml

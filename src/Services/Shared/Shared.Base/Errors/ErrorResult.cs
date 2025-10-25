@@ -15,6 +15,17 @@ public class ErrorResult
 
 	public IReadOnlyCollection<Error>? Errors { get; set; }
 
+	public ErrorResult(){ }
+
+	public ErrorResult(string errorCode, string? errorDescription = null, 
+		HttpStatusCode statusCode = HttpStatusCode.BadRequest, IReadOnlyCollection<Error>? errors = null)
+	{
+		ErrorCode = errorCode;
+		StatusCode = statusCode;
+		ErrorDescription = errorDescription;
+		Errors = errors;
+	}
+
 	public static readonly ErrorResult GenericError = new ErrorResult()
 	{
 		ErrorDescription = "Unknown error occured",
@@ -28,7 +39,7 @@ public class ErrorResult
 		StatusCode = HttpStatusCode.Unauthorized
 	};
 
-	public static ErrorResult DomainError(List<Error> errors) => new()
+	public static ErrorResult DomainError(List<Error>? errors = null) => new()
 	{
 		StatusCode = HttpStatusCode.BadRequest,
 		ErrorDescription = "Domain error occured",

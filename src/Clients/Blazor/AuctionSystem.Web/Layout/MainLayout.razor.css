@@ -1,0 +1,22 @@
+/* Make the whole layout fill the viewport and stack vertically */
+.layout-root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Let Content expand and push Footer down */
+.layout-content {
+    flex: 1 0 auto;
+    display: flex;           /* optional: keeps inner content stretching */
+    flex-direction: column;
+}
+
+/* Optional: if you want the inner content to stretch too */
+.site-layout-content {
+    flex: 1 0 auto;
+}
+
+/* (Optional) if you ever see extra gap below the footer in some setups
+html, body { height: 100%; }
+*/

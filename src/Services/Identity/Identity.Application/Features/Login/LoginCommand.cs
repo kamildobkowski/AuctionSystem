@@ -29,6 +29,6 @@ internal class LoginCommandHandler(
 			return CommandResult.Failure<LoginResponse>(new ErrorResult());
 		var accessToken = tokenService.GenerateAccessToken(user);
 		var refreshToken = await tokenService.GenerateRefreshToken(user);
-		return CommandResult.Success(new LoginResponse(accessToken, refreshToken));
+		return CommandResult.Success(new LoginResponse(accessToken.Token, accessToken.Expires, refreshToken.Token, refreshToken.Expires));
 	}
 }

@@ -1,0 +1,21 @@
+﻿@inherits LayoutComponentBase
+
+<Layout Class="layout"
+        Style="min-height:100vh; display:flex; flex-direction:column;">
+    <Header>
+        <Menu Theme="MenuTheme.Dark" Mode="MenuMode.Horizontal">
+            <MenuItem Key="1">nav 1</MenuItem>
+            <MenuItem Key="2">nav 2</MenuItem>
+            <MenuItem Key="3">nav 3</MenuItem>
+        </Menu>
+    </Header>
+
+    <!-- kluczowe: flex:1 na Content -->
+    <Content Style="padding:0 50px; flex:1 0 auto;">
+        <div class="site-layout-content">@Body</div>
+    </Content>
+
+    <Footer Style="text-align:center;">
+        Auction System ©2025 Created by Kamil Dobkowski
+    </Footer>
+</Layout>

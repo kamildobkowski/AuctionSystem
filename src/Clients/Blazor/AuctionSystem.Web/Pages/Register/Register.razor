@@ -1,0 +1,42 @@
+@page "/Register"
+@using AuctionSystem.Web.Pages.Register.Components
+
+<Card Loading="false" Style="max-width: 600px; margin: 50px auto auto;">
+    <TitleTemplate>
+        <Row Justify="RowJustify.Center">
+            <Col>
+                <h3>Register</h3>
+            </Col>
+        </Row>
+        <Row Justify="RowJustify.Center" >
+            <Col>
+                <RadioGroup @bind-Value="_userType" Size="InputSize.Small">
+                    <Radio RadioButton Value="@UserType.Personal">Personal</Radio>
+                    <Radio RadioButton Value="@UserType.Company">Company</Radio>
+                </RadioGroup>
+            </Col>
+        </Row>
+    </TitleTemplate>
+    <ChildContent>
+        <div class="switcher dir-right">
+            <div class="pane personal @( _userType == UserType.Personal ? "is-active" : null)">
+                <PersonalUserRegisterForm/>
+            </div>
+
+            <div class="pane company @( _userType == UserType.Company ? "is-active" : null)">
+                <CompanyUserRegisterForm/>
+            </div>
+        </div>
+    </ChildContent>
+</Card>
+
+@code
+{
+    private UserType _userType = UserType.Personal;
+    private bool _isPersonalUser => _userType== UserType.Personal; 
+    private enum UserType
+    {
+        Personal,
+        Company
+    }
+}

@@ -1,0 +1,30 @@
+/* Nakładamy elementy na siebie, ale bez absolute — kontener sam dopasuje wysokość */
+.switcher {
+    display: grid;
+}
+
+/* Oba panele zajmują to samo „pole” siatki */
+.switcher .pane {
+    grid-area: 1 / 1;
+    transition: transform .35s ease, opacity .35s ease, max-height .35s ease;
+    opacity: 0;
+    transform: translateX(0);
+    pointer-events: none;
+    /* ukryty panel nie wpływa na wysokość kontenera */
+    max-height: 0;
+    overflow: hidden;
+}
+
+/* Aktywny panel: widoczny, klikalny i ma swoją wysokość */
+.switcher .pane.is-active {
+    opacity: 1;
+    pointer-events: auto;
+    max-height: 2000px; /* większe niż maks. wysokość formularza */
+}
+
+/* Kierunek wejścia/wyjścia: ustawiamy pozycję panelu NIEaktywnego */
+.switcher.dir-right .pane:not(.is-active) { transform: translateX(40px); }  /* wejdzie z prawej */
+.switcher.dir-left  .pane:not(.is-active) { transform: translateX(-40px); } /* wejdzie z lewej */
+
+/* kosmetyka */
+.switcher .pane { will-change: transform, opacity, max-height; }

@@ -17,7 +17,7 @@ public class TokenService(
     IRefreshTokenHasher refreshTokenHasher)
     : ITokenService
 {
-    public string GenerateAccessToken(User user)
+    public (string Token, DateTime Expires) GenerateAccessToken(User user)
     {
         var now = DateTime.UtcNow;
         var expires = now.Add(config.AccessTokenLifetime);
@@ -50,31 +50,32 @@ public class TokenService(
         var securityToken = tokenHandler.CreateToken(tokenDescriptor);
         var tokenString = tokenHandler.WriteToken(securityToken);
 
-        return tokenString;
+        return (tokenString, expires);
     }
 
-    public async Task<string> GenerateRefreshToken(User user)
+    public async Task<(string Token, DateTime Expires)> GenerateRefreshToken(User user)
     {
         var bytes = RandomNumberGenerator.GetBytes(64);
         var refreshToken = Convert.ToBase64String(bytes);
         var hashedToken = refreshTokenHasher.Hash(refreshToken);
-        user.SetRefreshToken(hashedToken, DateTime.UtcNow.AddDays(30));
+        var expires = DateTime.UtcNow.AddDays(30);
+        user.SetRefreshToken(hashedToken, expires);
         await userRepository.SaveChangesAsync();
-        return refreshToken;
+        return (refreshToken, expires);
     }        
 
-    public async Task<Result<(string AccessToken, string RefreshToken)>> RefreshAsync(string refreshToken)
+    public async Task<Result<(string AccessToken, DateTime AccessExpires, string RefreshToken, DateTime RefreshExpires)>> RefreshAsync(string refreshToken)
     {
         var lookupHash = refreshTokenHasher.Hash(refreshToken);
         var user = await userRepository.GetByRefreshToken(lookupHash);
         if (user is null 
             || !user.RefreshTokenExpiresAt.HasValue 
             || user.RefreshTokenExpiresAt.Value < DateTime.UtcNow)
-            return Result<(string, string)>.Failure(ErrorResult.UnauthorizedError);
+            return Result<(string, DateTime, string, DateTime)>.Failure(ErrorResult.UnauthorizedError);
 
         var newAccess = GenerateAccessToken(user);
         var newRefreshPlain = await GenerateRefreshToken(user);
 
-        return Result<(string, string)>.Ok((newAccess, newRefreshPlain));
+        return Result<(string, DateTime, string, DateTime)>.Ok((newAccess.Token, newAccess.Expires, newRefreshPlain.Token, newRefreshPlain.Expires));
     }
  }

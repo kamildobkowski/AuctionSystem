@@ -1,0 +1,86 @@
+@page "/Login"
+@using AuctionSystem.Contracts.Common
+@using AuctionSystem.Contracts.Identity
+@using AuctionSystem.Contracts.Identity.Models.Login
+@inject NavigationManager Nav
+@inject IIdentityService IdentityService
+@inject IMessageService Message
+
+<Card Style="max-width: 500px; margin: 50px auto auto;">
+    <TitleTemplate>
+        <h3>Login</h3>
+    </TitleTemplate>
+    <ChildContent>
+        <Form @ref="_form"
+              Model="@_model"
+              LabelColSpan="8"
+              WrapperColSpan="16"
+              Size="FormSize.Large"
+              ValidateOnChange="true"
+              LabelAlign="AntLabelAlignType.Left"
+              RequiredMark="FormRequiredMark.Required">
+            <FormItem HasFeedback Label="Email" Required Name="Email">
+                <Input @bind-Value="_model.Email" Placeholder="Email"/>
+            </FormItem>
+            <FormItem HasFeedback Label="Password" Required Name="Password">
+                <InputPassword @bind-Value="_model.Password" Placeholder="Password"></InputPassword>
+            </FormItem>
+            <a onclick="@(() => NavToForgotPassword())" style="color: #0a53be">Forgot password?</a>
+            <Row Justify="RowJustify.Center" Style="margin-bottom: 16px">
+                <Button Type="@ButtonType.Primary" HtmlType="submit" Size="ButtonSize.Large" Disabled="@_isLoading" OnClick="HandleSubmit">
+                    <Spin Spinning="_isLoading">
+                        <p>Login</p>
+                    </Spin>
+                </Button>
+            </Row>
+        </Form>
+    </ChildContent>
+</Card>
+<Card Style="max-width: 500px; margin: 50px auto auto">
+    <TitleTemplate>
+        <Row Align="RowAlign.Middle" Justify="RowJustify.SpaceBetween">
+            <Col><h6 style="margin:0">First time with Auction System?</h6></Col>
+            <Col>
+                <Button Type="@ButtonType.Dashed" Size="ButtonSize.Large" Color="Color.Purple2" OnClick="NavToRegister">
+                    Register now!
+                </Button>
+            </Col>
+        </Row>
+    </TitleTemplate>
+</Card>
+
+
+@code {
+    bool _isLoading = false;
+    Form<LoginRequest> _form = new();
+    LoginRequest _model = new();
+    
+    void NavToForgotPassword()
+    {
+        Nav.NavigateTo("/forgotPassword", false, false);
+    }
+    
+    void NavToRegister()
+    {
+        Nav.NavigateTo("/register", false, false);
+    }
+
+    private async Task HandleSubmit()
+    {
+        if(!_form.Validate())
+            return;
+        _isLoading = true;
+
+        var response = await IdentityService.Login(_model);
+
+        if (!response.IsSuccess)
+            HandleErrorResult(response.ErrorResult!);
+    }
+    
+    private void HandleErrorResult(ErrorResult errorResult)
+    {
+        Message.Error("Login failed. Invalid email or password");
+        _isLoading = false;
+    }
+
+}

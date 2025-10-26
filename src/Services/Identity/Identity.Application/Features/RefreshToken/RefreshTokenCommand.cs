@@ -13,6 +13,10 @@ internal class RefreshTokenCommandHandler(ITokenService tokenService)
 		var result = await tokenService.RefreshAsync(command.Token);
 		if (!result.IsSuccess)
 			return CommandResult.Failure<RefreshTokenResponse>(result.ErrorResult!);
-		return CommandResult.Success(new RefreshTokenResponse(result.Value.AccessToken, result.Value.RefreshToken));
+		return CommandResult.Success(new RefreshTokenResponse(
+			result.Value.AccessToken,
+			result.Value.AccessExpires, 
+			result.Value.RefreshToken, 
+			result.Value.RefreshExpires));
 	}
 }

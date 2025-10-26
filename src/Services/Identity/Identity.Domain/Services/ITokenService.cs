@@ -5,8 +5,8 @@ namespace Identity.Domain.Services
 {
     public interface ITokenService
     {
-        string GenerateAccessToken(User user);
-        Task<string> GenerateRefreshToken(User user);
-        Task<Result<(string AccessToken, string RefreshToken)>> RefreshAsync(string refreshToken);
+        (string Token, DateTime Expires) GenerateAccessToken(User user);
+        Task<(string Token, DateTime Expires)> GenerateRefreshToken(User user);
+        Task<Result<(string AccessToken, DateTime AccessExpires, string RefreshToken, DateTime RefreshExpires)>> RefreshAsync(string refreshToken);
     }
 }

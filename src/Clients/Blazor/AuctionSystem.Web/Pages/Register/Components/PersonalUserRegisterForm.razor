@@ -1,0 +1,100 @@
+@using AuctionSystem.Contracts.Common
+@using AuctionSystem.Contracts.Identity
+@using AuctionSystem.Contracts.Identity.Models.RegisterPersonalUser
+@using AuctionSystem.Web.Common
+@using AuctionSystem.Web.Extensions
+@inject IIdentityService IdentityService
+@inject NavigationManager Nav
+@inject IMessageService Message
+
+<Form @ref="_form"
+              Model="@_model"
+              LabelColSpan="8"
+              WrapperColSpan="16"
+              Size="FormSize.Large"
+              ValidateOnChange="true"
+              OnFinish="HandleSubmit"
+              LabelAlign="AntLabelAlignType.Left"
+              RequiredMark="FormRequiredMark.Required">
+
+            <FormItem Label="First Name" Required HasFeedback Name="FirstName">
+                <Input @bind-Value="_model.FirstName" Placeholder="Tytus"/>
+            </FormItem>
+
+            <FormItem Label="Last Name" Required HasFeedback Name="LastName">
+                <Input @bind-Value="_model.LastName" Placeholder="Bomba"/>
+            </FormItem>
+
+            <FormItem Label="Email" Required HasFeedback Name="Email">
+                <Input @bind-Value="_model.Email" Placeholder="example@example.com"/>
+            </FormItem>
+
+            <FormItem Label="Password" Required HasFeedback Name="Password">
+                <InputPassword @bind-Value="_model.Password" Placeholder="Min. 8 characters including capital letter, number and special character"/>
+            </FormItem>
+
+            <FormItem Label="Repeat Password" Required HasFeedback Name="RepeatPassword">
+                <InputPassword @bind-Value="_model.RepeatPassword" Placeholder="Repeat password"/>
+            </FormItem>
+
+            <FormItem Label="Phone Number" Required Style="margin-bottom: 0; font-size: 0;">
+                <FormItem Style="display: inline-block; width: 25%;">
+                    <Select
+                        TItem="string" TItemValue="string"
+                        DataSource="@AddressHelper.PhonePrefixes"
+                        @bind-Value="_model.PhonePrefix"
+                        DefaultValue="@AddressHelper.PhonePrefixes[2]">
+                    </Select>
+                </FormItem>
+                <FormItem HasFeedback Style="display: inline-block; width: 75%;">
+                    <Input
+                        @bind-Value="_model.PhoneNumber"
+                        Placeholder="123456789" />
+                </FormItem>
+            </FormItem>
+            <Row Justify="RowJustify.Center">
+                <Button Type="@ButtonType.Primary" HtmlType="submit" Size="ButtonSize.Large" Disabled="@_isLoading">
+                    <Spin Spinning="_isLoading">
+                        <p>Register</p>
+                    </Spin>
+                </Button>
+            </Row>
+        </Form>
+
+@code {
+    private bool _isLoading = false;
+    private Form<RegisterPersonalUserRequest> _form = new();
+    private readonly RegisterPersonalUserRequest _model = new();
+    
+    private async Task HandleSubmit()
+    {
+        if (!_form.Validate())
+        {
+            return;
+        }
+
+        _isLoading = true;
+
+        var response = await IdentityService.RegisterPersonalUser(_model);
+        _isLoading = false;
+        if (!response.IsSuccess)
+        {
+            HandleServerSideErrors(response.ErrorResult!);
+            return;
+        }
+        Nav.NavigateTo("/login?reason=Registered", false, false);
+    }
+
+    private void HandleServerSideErrors(ErrorResult errorResult)
+    {
+        _form.AddValidationErrors(errorResult, () => StateHasChanged());
+        
+        if (errorResult.ErrorCode == "EmailAlreadyTaken")
+        {
+            _form.SetValidationMessages("Email", ["Email is already taken."]);
+            StateHasChanged();
+            return;
+        }
+        Message.Error("An unexpected error occurred. Please try again later.");
+    }
+}

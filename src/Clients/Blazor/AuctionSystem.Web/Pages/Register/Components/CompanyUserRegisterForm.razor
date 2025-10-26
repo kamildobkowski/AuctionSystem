@@ -1,0 +1,120 @@
+@using AuctionSystem.Contracts.Common
+@using AuctionSystem.Contracts.Identity
+@using AuctionSystem.Contracts.Identity.Models.RegisterCompanyUser
+@using AuctionSystem.Web.Common
+@using AuctionSystem.Web.Extensions
+@inject IIdentityService IdentityService
+@inject IMessageService Message
+@inject NavigationManager Nav
+
+<Form @ref="_form"
+              Model="@_model"
+              LabelColSpan="8"
+              WrapperColSpan="16"
+              Size="FormSize.Large"
+              ValidateOnChange="true"
+              OnFinish="HandleSubmit"
+              LabelAlign="AntLabelAlignType.Left"
+              RequiredMark="FormRequiredMark.Required">
+
+            <FormItem Label="Company Legal Name" Required Name="Name">
+                <Input @bind-Value="_model.Name" Placeholder="Example Ltd."/>
+            </FormItem>
+
+            <FormItem Label="Email" Required Name="Email">
+                <Input @bind-Value="_model.Email" Placeholder="example@example.com"/>
+            </FormItem>
+
+            <FormItem Label="Password" Required Name="Password">
+                <InputPassword @bind-Value="_model.Password" Placeholder="Min. 8 characters including capital letter, number and special character"/>
+            </FormItem>
+
+            <FormItem Label="Repeat Password" Required Name="RepeatPassword">
+                <InputPassword @bind-Value="_model.RepeatPassword" Placeholder="Repeat password"/>
+            </FormItem>
+            
+            <FormItem Label="Phone Number" Required Style="margin-bottom: 0; font-size: 0;">
+                <FormItem Style="display: inline-block; width: 25%;">
+                    <Select
+                        TItem="string" TItemValue="string"
+                        DataSource="@AddressHelper.PhonePrefixes"
+                        @bind-Value="_model.PhonePrefix"
+                        DefaultValue="@AddressHelper.PhonePrefixes[2]">
+                    </Select>
+                </FormItem>
+                <FormItem Style="display: inline-block; width: 75%;">
+                    <Input
+                        @bind-Value="_model.PhoneNumber"
+                        Placeholder="123456789" />
+                </FormItem>
+            </FormItem>
+            
+            <FormItem Label="Tax ID" Required Name="TaxId">
+                <Input @bind-Value="_model.TaxId" Placeholder="Tax ID"/>
+            </FormItem>
+            
+            <FormItem Label="Address Line 1" Required Name="Address.Line1">
+                <Input @bind-Value="_model.Address.Line1" Placeholder="Line 1"></Input>
+            </FormItem>
+            
+            <FormItem Label="Address Line 2" Name="Address.Line2">
+                <Input @bind-Value="_model.Address.Line2" Placeholder="Line 2"></Input>
+            </FormItem>
+            
+            <FormItem Label="Postal Code" Required Name="Address.PostalCode">
+                <Input @bind-Value="_model.Address.PostalCode" Placeholder="Postal Code"></Input>
+            </FormItem>
+            
+            <FormItem Label="City" Required Name="Address.City">
+                <Input @bind-Value="_model.Address.City" Placeholder="City"></Input>
+            </FormItem>
+            
+            <FormItem Label="Country" Required Name="Address.CountryCode">
+                <Select 
+                    @bind-Value="_model.Address.CountryCode"
+                    DataSource="@_countries"
+                    ItemValue="x => x.Value"
+                    ItemLabel="x => x.Key"
+                    EnableSearch></Select>
+            </FormItem>
+            
+            <Row Justify="RowJustify.Center">
+                <Button Type="@ButtonType.Primary" HtmlType="submit" Size="ButtonSize.Large" Disabled="@_isLoading">
+                    <Spin Spinning="_isLoading">
+                        <p>Register</p>
+                    </Spin>
+                </Button>
+            </Row>
+        </Form>
+
+@code {
+    private bool _isLoading = false;
+    private Form<RegisterCompanyUserRequest> _form = new();
+    private readonly RegisterCompanyUserRequest _model = new();
+
+    private readonly IReadOnlyDictionary<string, string> _countries = AddressHelper.Countries;
+    
+    private async Task HandleSubmit()
+    {
+        var response = await IdentityService.RegisterCompanyUser(_model);
+        if (!response.IsSuccess)
+        {
+            HandleServerSideErrors(response.ErrorResult!);
+            return;
+        }
+        Nav.NavigateTo("/login?reason=Registered", false, false);
+    }
+    
+    private void HandleServerSideErrors(ErrorResult errorResult)
+    {
+        _form.AddValidationErrors(errorResult, () => StateHasChanged());
+        
+        if (errorResult.ErrorCode == "EmailAlreadyTaken")
+        {
+            _form.SetValidationMessages("Email", ["Email is already taken."]);
+            StateHasChanged();
+            return;
+        }
+        Message.Error("An unexpected error occurred. Please try again later.");
+    }
+} 

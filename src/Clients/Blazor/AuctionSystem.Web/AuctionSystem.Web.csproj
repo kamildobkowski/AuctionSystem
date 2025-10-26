@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+      <UserSecretsId>3e955c40-08d5-4c21-9ab4-4325cc44622a</UserSecretsId>
+  </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AntDesign" Version="1.4.3" />
+        <PackageReference Include="Countries" Version="2.0.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.0" PrivateAssets="all" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\AuctionSystem.Contracts\AuctionSystem.Contracts.csproj" />
+      <ProjectReference Include="..\AuctionSystem.ExternalServices\AuctionSystem.ExternalServices.csproj" />
+    </ItemGroup>
+
+</Project>

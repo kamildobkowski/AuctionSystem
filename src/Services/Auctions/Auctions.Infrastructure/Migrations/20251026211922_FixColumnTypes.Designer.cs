@@ -3,25 +3,27 @@ using System;
 using Auctions.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using NpgsqlTypes;
 
 #nullable disable
 
 namespace Auctions.Infrastructure.Migrations
 {
     [DbContext(typeof(AuctionsDbContext))]
-    partial class AuctionsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251026211922_FixColumnTypes")]
+    partial class FixColumnTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "unaccent");
+            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "ltree");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Auctions.Domain.Entities.Auction", b =>
@@ -40,13 +42,10 @@ namespace Auctions.Infrastructure.Migrations
                     b.Property<DateTime?>("EndedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<NpgsqlTsVector>("SearchVector")
-                        .HasColumnType("tsvector");
-
                     b.Property<Guid>("SellerId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("SetEndDate")
+                    b.Property<DateTime>("SetEndDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("SetStartDate")
@@ -62,10 +61,6 @@ namespace Auctions.Infrastructure.Migrations
                         .HasColumnType("character varying(200)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SearchVector");
-
-                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchVector"), "GIN");
 
                     b.ToTable("Auctions");
 
@@ -113,6 +108,50 @@ namespace Auctions.Infrastructure.Migrations
                     b.HasIndex("AuctionId");
 
                     b.ToTable("Pictures");
+                });
+
+            modelBuilder.Entity("Auctions.Domain.ReadModels.Category", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long?>("ParentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("ltree");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Path");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("Path"), "gist");
+
+                    b.HasIndex("ParentId", "Slug")
+                        .IsUnique();
+
+                    b.ToTable("category_readonly", null, t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
             modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.InboxState", b =>
@@ -330,6 +369,16 @@ namespace Auctions.Infrastructure.Migrations
                     b.Navigation("Auction");
                 });
 
+            modelBuilder.Entity("Auctions.Domain.ReadModels.Category", b =>
+                {
+                    b.HasOne("Auctions.Domain.ReadModels.Category", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Parent");
+                });
+
             modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.OutboxMessage", b =>
                 {
                     b.HasOne("MassTransit.EntityFrameworkCoreIntegration.OutboxState", null)
@@ -366,6 +415,11 @@ namespace Auctions.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Pictures");
+                });
+
+            modelBuilder.Entity("Auctions.Domain.ReadModels.Category", b =>
+                {
+                    b.Navigation("Children");
                 });
 #pragma warning restore 612, 618
         }

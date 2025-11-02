@@ -1,4 +1,6 @@
+using Auctions.Application.AuctionList.Services;
 using Auctions.Domain.Repositories;
+using Auctions.Infrastructure.Configuration;
 using Auctions.Infrastructure.Database;
 using Auctions.Infrastructure.Repositories;
 using MassTransit;
@@ -6,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Minio;
 using Shared.Events.Events.Auctions;
 
 namespace Auctions.Infrastructure;
@@ -30,6 +33,8 @@ public static class DependencyInjectionExtension
 		});
 
 		services.AddScoped<IBidAuctionRepository, BidAuctionRepository>();
+		services.AddScoped<IAuctionRepository, AuctionRepository>();
+		services.AddScoped<IAuctionListReadRepository, AuctionRepository>();
 		
 		return services;
 	}
@@ -55,6 +60,17 @@ public static class DependencyInjectionExtension
 			});
 		});
 		
+		return services;
+	}
+	
+	private static IServiceCollection AddMinio(this IServiceCollection services, IConfiguration configuration)
+	{
+		var minioConfig = configuration.GetSection(MinioConfiguration.SectionName).Get<MinioConfiguration>();
+
+		var client = new MinioClient()
+			.WithEndpoint(minioConfig!.EndpointName)
+			.Build();
+
 		return services;
 	}
 }

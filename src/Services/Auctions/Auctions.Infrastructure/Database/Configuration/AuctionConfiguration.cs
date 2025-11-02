@@ -2,11 +2,13 @@ using Auctions.Domain.Common.Enums;
 using Auctions.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using NpgsqlTypes;
 
 namespace Auctions.Infrastructure.Database.Configuration;
 
-public class AuctionConfiguration : IEntityTypeConfiguration<Auction>
+public sealed class AuctionConfiguration : IEntityTypeConfiguration<Auction>
 {
+	internal const string SearchVectorName = "SearchVector";
 	public void Configure(EntityTypeBuilder<Auction> builder)
 	{
 		builder.UseTptMappingStrategy();
@@ -31,5 +33,10 @@ public class AuctionConfiguration : IEntityTypeConfiguration<Auction>
 		
 		builder.HasMany(x => x.Pictures)
 			.WithOne(x => x.Auction);
+
+		builder.Property<NpgsqlTsVector>(SearchVectorName);
+
+		builder.HasIndex(SearchVectorName)
+			.HasMethod("GIN");
 	}
 }

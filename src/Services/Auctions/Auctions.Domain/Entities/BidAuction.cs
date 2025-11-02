@@ -11,7 +11,7 @@ public class BidAuction : Auction
 
 	public BidAuction(string title,
 		string? description,
-		DateTime endDate,
+		DateTime? endDate,
 		decimal startingPrice,
 		decimal? minimalPrice,
 		Guid sellerId) 

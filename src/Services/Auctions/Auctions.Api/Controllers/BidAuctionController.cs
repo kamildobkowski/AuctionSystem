@@ -7,7 +7,7 @@ using Shared.Base.Cqrs.Extensions;
 namespace Auctions.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("auction/bid")]
 public class BidAuctionController : ControllerBase
 {
 	[HttpPost("create/initialize")]

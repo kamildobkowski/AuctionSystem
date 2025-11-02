@@ -17,7 +17,7 @@ public abstract class Auction : Aggregate<Guid>
 
 	public DateTime SetStartDate { get; protected set; }
 
-	public DateTime SetEndDate { get; protected set; }
+	public DateTime? SetEndDate { get; protected set; }
 
 	public DateTime? EndedAt { get; protected set; }
 
@@ -29,13 +29,13 @@ public abstract class Auction : Aggregate<Guid>
 
 	protected Auction() { } //for serialization
 	
-	protected Auction(string title, string? description, DateTime setEndDate, Guid sellerId)
+	protected Auction(string title, string? description, DateTime? setEndDate, Guid sellerId)
 	{
 		Id = Guid.NewGuid();
 		Title = title;
 		Description = description;
 		Status = AuctionStatus.Created;
-		SetEndDate = setEndDate.ToUniversalTime();
+		SetEndDate = setEndDate?.ToUniversalTime();
 		AuctionStats = new AuctionStats(Id);
 		SellerId = sellerId;
 		CreatedAt = DateTimeHelper.Now;

@@ -7,7 +7,6 @@ namespace Auctions.Infrastructure.Database;
 public class AuctionsDbContext(DbContextOptions<AuctionsDbContext> options) : DbContext(options)
 {
 	public DbSet<Auction> Auctions { get; set; }
-
 	public DbSet<BidAuction> BidAuctions { get; set; }
 
 	public DbSet<BuyNowAuction> BuyNowAuctions { get; set; }
@@ -33,6 +32,7 @@ public class AuctionsDbContext(DbContextOptions<AuctionsDbContext> options) : Db
 		{
 			cfg.ToTable("outbox_state", "mt");
 		});
+		modelBuilder.HasPostgresExtension("unaccent");
 		base.OnModelCreating(modelBuilder);
 	}
 }

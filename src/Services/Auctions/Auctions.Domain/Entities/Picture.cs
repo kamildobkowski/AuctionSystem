@@ -12,8 +12,16 @@ public class Picture
 
 	public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 	
-	
 	public Guid? AuctionId { get; set; }
 
 	public Auction? Auction { get; set; }
+	
+	public Picture(Guid auctionId, string url, bool isPrimary)
+	{
+		AuctionId = auctionId;
+		Url = url;
+		IsPrimary = isPrimary;
+	}
+	
+	private Picture(){}
 }

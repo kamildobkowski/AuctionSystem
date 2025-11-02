@@ -7,4 +7,4 @@ public sealed record InitializeCreateBidAuctionCommand(
 	string? Description, 
 	decimal StartingPrice, 
 	decimal? MinimalPrice,
-	DateTime EndDate) : ICommand;
+	DateTime? EndDate) : ICommand;

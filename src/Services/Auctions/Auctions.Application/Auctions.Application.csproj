@@ -12,4 +12,8 @@
       <ProjectReference Include="..\Auctions.Domain\Auctions.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="AnyAscii" Version="0.3.3" />
+    </ItemGroup>
+
 </Project>

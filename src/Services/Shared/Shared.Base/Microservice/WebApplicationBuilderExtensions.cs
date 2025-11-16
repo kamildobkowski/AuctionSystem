@@ -43,12 +43,10 @@ public static class WebApplicationBuilderExtensions
 					},
 					OnChallenge = ctx =>
 					{
-						// Will run on 401
 						Console.WriteLine($"JWT challenge: {ctx.Error} - {ctx.ErrorDescription}");
 						return Task.CompletedTask;
 					}
 				};
-				// Include details in WWW-Authenticate header (dev only)
 				options.IncludeErrorDetails = true;
 			});
 		

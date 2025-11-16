@@ -13,8 +13,4 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.9" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>
-    
-    <ItemGroup>
-      <ProjectReference Include="..\Shared.Events\Shared.Events.csproj" />
-    </ItemGroup>
 </Project>

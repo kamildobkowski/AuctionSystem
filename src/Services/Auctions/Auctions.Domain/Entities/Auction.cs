@@ -29,7 +29,7 @@ public abstract class Auction : Aggregate<Guid>
 
 	protected Auction() { } //for serialization
 	
-	protected Auction(string title, string? description, DateTime? setEndDate, Guid sellerId)
+	protected Auction(string title, string? description, DateTime? setEndDate, Guid sellerId, List<Guid> pictureIds)
 	{
 		Id = Guid.NewGuid();
 		Title = title;
@@ -39,5 +39,6 @@ public abstract class Auction : Aggregate<Guid>
 		AuctionStats = new AuctionStats(Id);
 		SellerId = sellerId;
 		CreatedAt = DateTimeHelper.Now;
+		Pictures = pictureIds.Select((pid, x) => new Picture(pid, Id, x == 0)).ToList();
 	}
 }

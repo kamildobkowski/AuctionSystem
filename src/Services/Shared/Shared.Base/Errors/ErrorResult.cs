@@ -38,6 +38,13 @@ public class ErrorResult
 		ErrorCode = nameof(UnauthorizedError),
 		StatusCode = HttpStatusCode.Unauthorized
 	};
+	
+	public static readonly ErrorResult NotFoundError = new ErrorResult()
+	{
+		ErrorCode = nameof(NotFoundError),
+		ErrorDescription = "Resource not found",
+		StatusCode = HttpStatusCode.NotFound
+	};
 
 	public static ErrorResult DomainError(List<Error>? errors = null) => new()
 	{

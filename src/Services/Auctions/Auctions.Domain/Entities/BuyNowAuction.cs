@@ -9,8 +9,9 @@ public class BuyNowAuction : Auction
 		string? description, 
 		DateTime setEndDate, 
 		decimal price,
-		Guid sellerId) 
-		: base(title, description, setEndDate, sellerId)
+		Guid sellerId, 
+		List<Guid> pictureIds) 
+		: base(title, description, setEndDate, sellerId, pictureIds)
 	{
 		Price = price;
 	}

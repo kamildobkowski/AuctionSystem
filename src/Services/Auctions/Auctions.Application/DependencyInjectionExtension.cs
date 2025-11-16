@@ -1,8 +1,6 @@
 using Auctions.Application.AuctionList.GetUserAuctionShortList;
-using Auctions.Application.BidAuction.FinalizeCreate;
 using Auctions.Application.BidAuction.InitializeCreate;
 using Auctions.Application.Contracts.AuctionList.GetUserShortList;
-using Auctions.Application.Contracts.BidAuction.FinalizeCreate;
 using Auctions.Application.Contracts.BidAuction.InitializeCreate;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,15 +13,10 @@ public static class DependencyInjectionExtension
 {
 	public static IServiceCollection AddApplication(this IServiceCollection services)
 	{
-		services.AddScoped<IValidator<InitializeCreateBidAuctionCommand>, InitializeCreateBidAuctionCommandValidator>();
-		services.AddScoped<IValidator<FinalizeCreateBidAuctionCommand>, FinalizeCreateBidAuctionCommandValidator>();
-		
+		services.AddScoped<IValidator<CreateBidAuctionCommand>, CreateBidAuctionCommandValidator>();
 		services
-			.AddScoped<ICommandHandler<InitializeCreateBidAuctionCommand, 
-				InitializeCreateBidAuctionCommandResponse>, InitializeCreateBidAuctionCommandHandler>();
-		services
-			.AddScoped<ICommandHandler<FinalizeCreateBidAuctionCommand, FinalizeCreateBidAuctionCommandResponse>, 
-				FinalizeCreateBidAuctionCommandHandler>();
+			.AddScoped<ICommandHandler<CreateBidAuctionCommand, 
+				CreateBidAuctionCommandResponse>, CreateBidAuctionCommandHandler>();
 		services
 			.AddScoped<IQueryHandler<GetUserAuctionShortListQuery, GetUserAuctionShortListQueryResponse>,
 				GetUserAuctionShortListQueryHandler>();

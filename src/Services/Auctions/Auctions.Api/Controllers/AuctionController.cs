@@ -6,7 +6,7 @@ using Shared.Base.Cqrs.Queries;
 namespace Auctions.Api.Controllers;
 
 [ApiController]
-[Route("auction")]
+[Route("auctions")]
 public sealed class AuctionController : ControllerBase
 {
 	[HttpGet("my/shortList")]

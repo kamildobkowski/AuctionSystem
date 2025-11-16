@@ -5,12 +5,13 @@ using Auctions.Domain.Entities;
 using Auctions.Domain.Repositories;
 using Auctions.Infrastructure.Database;
 using Auctions.Infrastructure.Database.Configuration;
+using Auctions.Infrastructure.Helpers;
 using Microsoft.EntityFrameworkCore;
 using NpgsqlTypes;
 
 namespace Auctions.Infrastructure.Repositories;
 
-public class AuctionRepository(AuctionsDbContext dbContext) 
+public class AuctionRepository(AuctionsDbContext dbContext, IFileHelper fileHelper) 
 	: GenericRepository<Auction, Guid>(dbContext), IAuctionRepository, IAuctionListReadRepository
 {
 	protected override IQueryable<Auction> GetQueryable()
@@ -22,6 +23,9 @@ public class AuctionRepository(AuctionsDbContext dbContext)
    public async Task<GetUserAuctionShortListQueryResponse> GetUserAuctionShortListAsync(Guid userId,
        string? filter, int pageNumber, int pageSize, CancellationToken cancellationToken = default)
    {
+       if (pageNumber < 1) pageNumber = 1;
+       if (pageSize < 1) pageSize = 10;
+
        var query = dbContext.Auctions
           .Where(x => x.SellerId == userId);
 
@@ -49,7 +53,7 @@ public class AuctionRepository(AuctionsDbContext dbContext)
              x.Description,
              x.Status,
              x.EndedAt ?? x.SetEndDate,
-             x.Pictures.OrderByDescending(p => p.IsPrimary).Select(p => p.Url).FirstOrDefault(),
+             x.Pictures.OrderByDescending(p => p.IsPrimary).Select(p => fileHelper.GetFileUrl(p.Id)).FirstOrDefault(),
              x is BidAuction ? (x as BidAuction)!.CurrentPrice :
                          (x is BuyNowAuction ? (x as BuyNowAuction)!.Price :
                          0),

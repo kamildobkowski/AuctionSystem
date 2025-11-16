@@ -2,6 +2,7 @@ using Auctions.Application.AuctionList.Services;
 using Auctions.Domain.Repositories;
 using Auctions.Infrastructure.Configuration;
 using Auctions.Infrastructure.Database;
+using Auctions.Infrastructure.Helpers;
 using Auctions.Infrastructure.Repositories;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using Shared.Events.Events.Auctions;
+using Shared.Events.Events.Files;
 
 namespace Auctions.Infrastructure;
 
@@ -17,9 +19,15 @@ public static class DependencyInjectionExtension
 {
 	public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
 	{
+		var jwtConfig = new FileConfiguration();
+		configuration.GetSection("File").Bind(jwtConfig);
+		services.AddSingleton(jwtConfig);
+		
+		services.AddSingleton<IFileHelper, FileHelper>();
+		
 		services.AddDatabase(configuration);
 
-		services.SetupMassTransit();
+		services.SetupMassTransit(configuration);
 		
 		return services;
 	}
@@ -39,7 +47,7 @@ public static class DependencyInjectionExtension
 		return services;
 	}
 
-	private static IServiceCollection SetupMassTransit(this IServiceCollection services)
+	private static IServiceCollection SetupMassTransit(this IServiceCollection services, IConfiguration configuration)
 	{
 		services.AddMassTransit(x =>
 		{
@@ -53,24 +61,14 @@ public static class DependencyInjectionExtension
 			x.AddRider(rider =>
 			{
 				rider.AddProducer<BidAuctionCreatedEvent>(BidAuctionCreatedEvent.Topic);
+				rider.AddProducer<SetImageToUsedCommand>(SetImageToUsedCommand.Topic);
 				rider.UsingKafka((context, configurator) =>
 				{
-					configurator.Host("vpn.kamildobkowski.pl:9092");
+					configurator.Host(configuration["Kafka:BootstrapServers"]);
 				});
 			});
 		});
 		
-		return services;
-	}
-	
-	private static IServiceCollection AddMinio(this IServiceCollection services, IConfiguration configuration)
-	{
-		var minioConfig = configuration.GetSection(MinioConfiguration.SectionName).Get<MinioConfiguration>();
-
-		var client = new MinioClient()
-			.WithEndpoint(minioConfig!.EndpointName)
-			.Build();
-
 		return services;
 	}
 }

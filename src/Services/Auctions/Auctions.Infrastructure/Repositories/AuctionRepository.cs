@@ -1,4 +1,5 @@
 using Auctions.Application.AuctionList.Services;
+using Auctions.Application.Common.Helpers;
 using Auctions.Application.Contracts.AuctionList.GetUserShortList;
 using Auctions.Domain.Common.Enums;
 using Auctions.Domain.Entities;
@@ -59,14 +60,15 @@ public class AuctionRepository(AuctionsDbContext dbContext, IFileHelper fileHelp
                          0),
              x is BidAuction ? (x as BidAuction)!.MinimalPrice :
                 (decimal?)null, 
-             x is BidAuction ? AuctionType.BidAuction : AuctionType.BuyNowAuction ))
+             x is BidAuction ? AuctionType.BidAuction : AuctionType.BuyNowAuction,
+             SlugHelper.Generate(x.Id, x.Title)))
           .ToListAsync(cancellationToken);
 
        var hasNext = await query
           .Skip(pageSize * pageNumber)
           .AnyAsync(cancellationToken);
 
-       var totalPages = pageSize > 0 ? (int)Math.Ceiling((double)totalCount / pageSize) : 0;
+       var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
        
        return new GetUserAuctionShortListQueryResponse(items, totalCount, hasNext, totalPages);
    }

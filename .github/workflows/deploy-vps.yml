@@ -10,9 +10,6 @@ jobs:
     name: SSH & Docker-Compose on Remote
     runs-on: ubuntu-latest
 
-    env:
-      KAFKA_HOST: ${{ secrets.KAFKA_HOST }}
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -23,10 +20,6 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-      
-      - name: Generate .env
-        run: |
-          echo "KAFKA_HOST=${KAFKA_HOST}" > src/.env
       
       - name: Rsync project to remote
         run: |

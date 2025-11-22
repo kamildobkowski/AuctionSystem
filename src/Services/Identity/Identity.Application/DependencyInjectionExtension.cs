@@ -5,9 +5,11 @@ using Identity.Application.Features.RegisterUser.Common.Models;
 using Identity.Application.Features.RegisterUser.Common.Validators;
 using Identity.Application.Features.RegisterUser.RegisterCompanyUser;
 using Identity.Application.Features.RegisterUser.RegisterPersonalUser;
+using Identity.Application.Features.UserData.GetUserData;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Base.Cqrs.Commands;
+using Shared.Base.Cqrs.Queries;
 
 namespace Identity.Application;
 
@@ -20,6 +22,7 @@ public static class DependencyInjectionExtension
 		services.AddScoped<ICommandHandler<RegisterCompanyUserCommand, RegisterCompanyUserResponse>, RegisterCompanyUserCommandHandler>();
 		services.AddScoped<ICommandHandler<LoginCommand, LoginResponse>, LoginCommandHandler>();
 		services.AddScoped<ICommandHandler<RefreshTokenCommand, RefreshTokenResponse>, RefreshTokenCommandHandler>();
+		services.AddScoped<IQueryHandler<GetUserDataQuery, GetUserDataQueryResponse>, GetUserDataQueryHandler>();
 		#endregion
 
 		#region Validators

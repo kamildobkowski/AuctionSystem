@@ -1,8 +1,8 @@
-using Auctions.Application.Contracts.BidAuction.InitializeCreate;
+using Auctions.Application.Contracts.BidAuctions.InitializeCreate;
 using Auctions.Domain.Common.Helpers;
 using FluentValidation;
 
-namespace Auctions.Application.BidAuction.InitializeCreate;
+namespace Auctions.Application.BidAuctions.InitializeCreate;
 
 public sealed class CreateBidAuctionCommandValidator : AbstractValidator<CreateBidAuctionCommand>
 {

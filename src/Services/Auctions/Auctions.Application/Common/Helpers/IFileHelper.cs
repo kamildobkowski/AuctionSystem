@@ -1,4 +1,4 @@
-namespace Auctions.Infrastructure.Helpers;
+namespace Auctions.Application.Common.Helpers;
 
 public interface IFileHelper
 {

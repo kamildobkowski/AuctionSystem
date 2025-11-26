@@ -1,15 +1,24 @@
+using Auctions.Application.AuctionDetails.Services;
 using Auctions.Application.AuctionList.Services;
+using Auctions.Application.Common.Helpers;
+using Auctions.Application.Common.Jobs;
 using Auctions.Domain.Repositories;
 using Auctions.Infrastructure.Configuration;
 using Auctions.Infrastructure.Database;
+using Auctions.Infrastructure.ExternalServices.Identity;
 using Auctions.Infrastructure.Helpers;
 using Auctions.Infrastructure.Repositories;
+using Auctions.Infrastructure.Schedulers;
+using Auctions.Infrastructure.Services;
+using Hangfire;
+using Hangfire.Redis.StackExchange;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Minio;
+using Refit;
+using Shared.Base.Http;
 using Shared.Events.Events.Auctions;
 using Shared.Events.Events.Files;
 
@@ -22,12 +31,16 @@ public static class DependencyInjectionExtension
 		var jwtConfig = new FileConfiguration();
 		configuration.GetSection("File").Bind(jwtConfig);
 		services.AddSingleton(jwtConfig);
+		services.AddHangfire(config => config.UseRedisStorage(configuration.GetConnectionString("redis")));
 		
-		services.AddSingleton<IFileHelper, FileHelper>();
+		services.AddSingleton<Auctions.Application.Common.Helpers.IFileHelper, FileHelper>();
+		services.AddScoped<IFireAndForgetScheduler, HangfireScheduler>();
 		
 		services.AddDatabase(configuration);
 
 		services.SetupMassTransit(configuration);
+		
+		services.SetupExternalServices(configuration);
 		
 		return services;
 	}
@@ -68,6 +81,20 @@ public static class DependencyInjectionExtension
 				});
 			});
 		});
+		
+		return services;
+	}
+
+	private static IServiceCollection SetupExternalServices(this IServiceCollection services,
+		IConfiguration configuration)
+	{
+		services.AddRefitClient<IIdentityClient>()
+			.ConfigureHttpClient(c =>
+			{
+				c.BaseAddress = new Uri(configuration["ExternalServices:Identity:BaseUrl"]!);
+			})
+			.AddHttpMessageHandler<BearerTokenDelegatingHandler>();
+		services.AddSingleton<ISellerDataService, SellerDataService>();
 		
 		return services;
 	}

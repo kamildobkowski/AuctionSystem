@@ -1,4 +1,4 @@
-using Auctions.Application.Contracts.BidAuction.InitializeCreate;
+using Auctions.Application.Contracts.BidAuctions.InitializeCreate;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Base.Cqrs.Commands;
 using Shared.Base.Cqrs.Extensions;

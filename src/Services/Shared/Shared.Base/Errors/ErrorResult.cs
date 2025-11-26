@@ -69,4 +69,11 @@ public class ErrorResult
 				.ToList(),
 		ErrorDescription = "Validation Error Occured"
 	};
+
+	public static ErrorResult ExternalServiceError(HttpStatusCode statusCode = HttpStatusCode.BadGateway)
+		=> new()
+		{
+			ErrorCode = "ExternalServiceError",
+			StatusCode =  statusCode
+		};
 }

@@ -12,6 +12,22 @@ public static class SlugHelper
 			return id.ToString();
 		}
 
+		var text = GetSlug(title);
+        
+		return $"{text}-{id:N}";
+	}
+
+	public static string? Check(Guid idFromRequest, string titleFromRequest, Guid id, string title)
+	{
+		var slug = $"{titleFromRequest}-{idFromRequest:N}";
+
+		var expectedSlug = Generate(id, title);
+
+		return slug.Equals(expectedSlug, StringComparison.Ordinal) ? null : GetSlug(expectedSlug);
+	}
+
+	private static string GetSlug(string title)
+	{
 		var text = title.Transliterate();
         
 		text = text.ToLowerInvariant();
@@ -21,19 +37,6 @@ public static class SlugHelper
 		text = Regex.Replace(text, @"\s+", " ").Trim();
         
 		text = Regex.Replace(text, @"\s", "-");
-        
-		return $"{text}-{id:N}";
-	}
-
-	public static bool Check(string slug, Guid id, string title)
-	{
-		if (string.IsNullOrWhiteSpace(slug))
-		{
-			return false;
-		}
-
-		var expectedSlug = Generate(id, title);
-
-		return slug.Equals(expectedSlug, StringComparison.Ordinal);
+		return text;
 	}
 }

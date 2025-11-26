@@ -1,5 +1,5 @@
 using Auctions.Application.Common.Helpers;
-using Auctions.Application.Contracts.BidAuction.InitializeCreate;
+using Auctions.Application.Contracts.BidAuctions.InitializeCreate;
 using Auctions.Domain.Repositories;
 using FluentValidation;
 using MassTransit;
@@ -9,7 +9,7 @@ using Shared.Base.Token;
 using Shared.Events.Events.Auctions;
 using Shared.Events.Events.Files;
 
-namespace Auctions.Application.BidAuction.InitializeCreate;
+namespace Auctions.Application.BidAuctions.InitializeCreate;
 
 internal sealed class CreateBidAuctionCommandHandler(
 	IValidator<CreateBidAuctionCommand> validator,

@@ -105,6 +105,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       File__GatewayUrl: ${API_GATEWAY_URL:-http://localhost:4444}
+      ExternalServices__Identity__BaseUrl: http://yarp-gateway:80/api/identity
     depends_on:
       - auction_sql_db
       - kafka

@@ -1,7 +1,9 @@
+using Auctions.Application.AuctionDetails.GetAuctionDetails;
 using Auctions.Application.AuctionList.GetUserAuctionShortList;
-using Auctions.Application.BidAuction.InitializeCreate;
+using Auctions.Application.BidAuctions.InitializeCreate;
+using Auctions.Application.Contracts.AuctionDetails;
 using Auctions.Application.Contracts.AuctionList.GetUserShortList;
-using Auctions.Application.Contracts.BidAuction.InitializeCreate;
+using Auctions.Application.Contracts.BidAuctions.InitializeCreate;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Base.Cqrs.Commands;
@@ -20,6 +22,10 @@ public static class DependencyInjectionExtension
 		services
 			.AddScoped<IQueryHandler<GetUserAuctionShortListQuery, GetUserAuctionShortListQueryResponse>,
 				GetUserAuctionShortListQueryHandler>();
+		services
+			.AddScoped<IQueryHandler<GetAuctionDetailsQuery, GetAuctionDetailsResponse>,
+				GetAuctionDetailsQueryHandler>();
+		services.AddScoped<GetAuctionDetailsResponseBuilder>();
 		return services;
 	}
 }

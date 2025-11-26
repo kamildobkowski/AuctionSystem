@@ -20,11 +20,6 @@ public sealed class AuctionConfiguration : IEntityTypeConfiguration<Auction>
 		
 		builder.Property(x => x.Description)
 			.HasMaxLength(1000);
-		
-		builder.Property(x => x.Status)
-			.HasConversion(
-				x => x.ToString(), 
-				x => (AuctionStatus)Enum.Parse(typeof(AuctionStatus), x));
 
 		builder.HasOne(x => x.AuctionStats)
 			.WithOne(x => x.Auction)

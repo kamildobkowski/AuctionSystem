@@ -17,4 +17,6 @@ public class BuyNowAuction : Auction
 	}
 
 	public decimal Price { get; private set; }
+	
+	public override decimal DisplayPrice => Price;
 }

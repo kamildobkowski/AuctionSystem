@@ -23,11 +23,9 @@ public class BidAuction : Auction
 		if (startDate is null)
 		{
 			SetStartDate = DateTimeHelper.Now;
-			Status = AuctionStatus.Created;
 			return;
 		}
-		SetStartDate = DateTimeHelper.RoundToNext10Minutes(startDate.Value.ToUniversalTime());
-		Status = AuctionStatus.Scheduled;	
+		SetStartDate = DateTimeHelper.RoundToNext10Minutes(startDate.Value.ToUniversalTime()); 
 	}
 	
 	public decimal StartingPrice { get; private set; }
@@ -35,4 +33,6 @@ public class BidAuction : Auction
 	public decimal? MinimalPrice { get; private set; }
 
 	public decimal CurrentPrice { get; private set; }
+	
+	public override decimal DisplayPrice => CurrentPrice;
 }

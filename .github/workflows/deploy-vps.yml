@@ -23,7 +23,7 @@ jobs:
       
       - name: Rsync project to remote
         run: |
-          rsync -avz \
+          rsync -avz --delete \
             --exclude '.git*' \
             --exclude '.env' \
             -e "ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }}" \

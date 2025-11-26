@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Shared.Base.Errors;
+using Shared.Base.Http;
 using Shared.Base.Token;
 
 namespace Shared.Base.Microservice;
@@ -99,6 +100,7 @@ public static class WebApplicationBuilderExtensions
 		
 		builder.Services.AddHttpContextAccessor();
 		builder.Services.AddScoped<IUserContextProvider, UserContextProvider>();
+		builder.Services.AddScoped<BearerTokenDelegatingHandler, BearerTokenDelegatingHandler>();
 		
 		return builder;
 	}

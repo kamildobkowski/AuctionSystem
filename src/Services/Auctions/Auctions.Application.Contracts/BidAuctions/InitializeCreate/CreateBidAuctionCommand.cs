@@ -1,6 +1,6 @@
 using Shared.Base.Cqrs.Commands;
 
-namespace Auctions.Application.Contracts.BidAuction.InitializeCreate;
+namespace Auctions.Application.Contracts.BidAuctions.InitializeCreate;
 
 public sealed record CreateBidAuctionCommand(
 	string Title, 

@@ -10,6 +10,5 @@ public sealed record UserAuctionShortListItem(
 	DateTime? EndDate,
 	string? DefaultPictureUrl,
 	decimal? CurrentPrice,
-	decimal? MinimalPrice,
 	AuctionType AuctionType,
 	string Slug);

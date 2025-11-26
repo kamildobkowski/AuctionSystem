@@ -1,12 +1,11 @@
 using Auctions.Application.AuctionList.Services;
+using Auctions.Application.Common.Extensions;
 using Auctions.Application.Common.Helpers;
 using Auctions.Application.Contracts.AuctionList.GetUserShortList;
-using Auctions.Domain.Common.Enums;
 using Auctions.Domain.Entities;
 using Auctions.Domain.Repositories;
 using Auctions.Infrastructure.Database;
 using Auctions.Infrastructure.Database.Configuration;
-using Auctions.Infrastructure.Helpers;
 using Microsoft.EntityFrameworkCore;
 using NpgsqlTypes;
 
@@ -48,21 +47,21 @@ public class AuctionRepository(AuctionsDbContext dbContext, IFileHelper fileHelp
        var items = await query.Skip(pageSize * (pageNumber - 1))
           .Take(pageSize)
           .AsNoTracking()
+          .Include(x => x.Pictures)
+          .ToListAsync(cancellationToken);
+          
+       var responseItems = items
           .Select(x => new UserAuctionShortListItem(
              x.Id,
              x.Title,
              x.Description,
-             x.Status,
+             x.GetStatus(),
              x.EndedAt ?? x.SetEndDate,
              x.Pictures.OrderByDescending(p => p.IsPrimary).Select(p => fileHelper.GetFileUrl(p.Id)).FirstOrDefault(),
-             x is BidAuction ? (x as BidAuction)!.CurrentPrice :
-                         (x is BuyNowAuction ? (x as BuyNowAuction)!.Price :
-                         0),
-             x is BidAuction ? (x as BidAuction)!.MinimalPrice :
-                (decimal?)null, 
-             x is BidAuction ? AuctionType.BidAuction : AuctionType.BuyNowAuction,
+             x.DisplayPrice,
+             x.GetAuctionType(),
              SlugHelper.Generate(x.Id, x.Title)))
-          .ToListAsync(cancellationToken);
+          .ToList();
 
        var hasNext = await query
           .Skip(pageSize * pageNumber)
@@ -70,6 +69,12 @@ public class AuctionRepository(AuctionsDbContext dbContext, IFileHelper fileHelp
 
        var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
        
-       return new GetUserAuctionShortListQueryResponse(items, totalCount, hasNext, totalPages);
+       return new GetUserAuctionShortListQueryResponse(responseItems, totalCount, hasNext, totalPages);
    }
+
+   public Task IncrementViewCountAsync(Guid auctionId)
+      => dbContext.AuctionStats
+         .Where(x => x.AuctionId == auctionId)
+         .ExecuteUpdateAsync(x => x
+            .SetProperty(x => x.Views, x => x.Views + 1));
 }
